@@ -11,12 +11,10 @@ describe("globalErrorHandler", () => {
 
   beforeEach(() => {
     req = {};
-
     res = {
       status: vi.fn().mockReturnThis(),
       json: vi.fn(),
     };
-
     next = vi.fn();
   });
 
