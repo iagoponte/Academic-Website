@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id           String  @id @default(uuid())
+  name         String
+  email        String  @unique
+  registrationNumber String   @unique
+  isActive     Boolean @default(true)
+
+  enrollments Enrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Teacher {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+  password String
+
+  classes ClassTeacher[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Class {
+  id       String @id @default(uuid())
+  name     String
+  semester String
+
+  enrollments Enrollment[]
+  teachers    ClassTeacher[]
+  evaluations Evaluation[]
+
+  createdAt DateTime @default(now())
+}
+
+model Enrollment {
+  id        String @id @default(uuid())
+  studentId String
+  classId   String
+
+  student Student @relation(fields: [studentId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
+
+  grades EvaluationGrade[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, classId])
+}
+
+model ClassTeacher {
+  id        String @id @default(uuid())
+  teacherId String
+  classId   String
+
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
+
+  @@unique([teacherId, classId])
+}
+
+enum EvaluationType {
+  AV1
+  AV2
+  FINAL
+  SUBSTITUTIVE
+  OTHER
+}
+
+model Evaluation {
+  id        String   @id @default(uuid())
+  type      EvaluationType 
+  description String? 
+  weight    Float
+
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  grades    EvaluationGrade[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // no evaluation type repetition in the same class
+  @@unique([classId, type]) 
+}
+
+model EvaluationGrade {
+  id           String @id @default(uuid())
+  enrollmentId String
+  evaluationId String
+  value        Float
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+  evaluation Evaluation @relation(fields: [evaluationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([enrollmentId, evaluationId])
+  @@index([enrollmentId])
+}
