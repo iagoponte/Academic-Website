@@ -35,7 +35,7 @@ app.use('/api/class-teacher', classTeacherRoutes);
 app.use('/api/classes', classRoutes)
 app.use('/api/enrollments', enrollmentRoutes)
 app.use('/api/grades', gradeRoutes)
-app.use('/api/evaluation', evaluationRoutes)
+app.use('/api/evaluations', evaluationRoutes)
 app.use('/api/report-card', reportCardRoutes)
 
 app.use(globalErrorHandler);

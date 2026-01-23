@@ -11,9 +11,9 @@ describe("ClassTeacherService", () => {
     repository = {
       assign: vi.fn(),
       unassign: vi.fn(),
-      AssignmentExists: vi.fn(),
-      ClassExists: vi.fn(),
-      TeacherExists: vi.fn(),
+      assignmentExists: vi.fn(),
+      classExists: vi.fn(),
+      teacherExists: vi.fn(),
     };
 
     service = new ClassTeacherService(repository);
@@ -23,22 +23,22 @@ describe("ClassTeacherService", () => {
   it("should assign a teacher to a class", async () => {
     const data = { classId: "class1", teacherId: "teacher1" };
 
-    repository.AssignmentExists.mockResolvedValue(false);
-    repository.ClassExists.mockResolvedValue(true);
-    repository.TeacherExists.mockResolvedValue(true);
+    repository.assignmentExists.mockResolvedValue(false);
+    repository.classExists.mockResolvedValue(true);
+    repository.teacherExists.mockResolvedValue(true);
 
     await service.assign(data);
 
-    expect(repository.AssignmentExists).toHaveBeenCalledWith(data);
-    expect(repository.ClassExists).toHaveBeenCalledWith("class1");
-    expect(repository.TeacherExists).toHaveBeenCalledWith("teacher1");
+    expect(repository.assignmentExists).toHaveBeenCalledWith(data);
+    expect(repository.classExists).toHaveBeenCalledWith("class1");
+    expect(repository.teacherExists).toHaveBeenCalledWith("teacher1");
     expect(repository.assign).toHaveBeenCalledWith(data);
   });
 
   it("should not assign if already assigned", async () => {
     const data = { classId: "class1", teacherId: "teacher1" };
 
-    repository.AssignmentExists.mockResolvedValue(true);
+    repository.assignmentExists.mockResolvedValue(true);
 
     await expect(service.assign(data)).rejects.toBeInstanceOf(AppError);
 
@@ -48,8 +48,8 @@ describe("ClassTeacherService", () => {
   it("should throw if class does not exist", async () => {
     const data = { classId: "class1", teacherId: "teacher1" };
 
-    repository.AssignmentExists.mockResolvedValue(false);
-    repository.ClassExists.mockResolvedValue(false);
+    repository.assignmentExists.mockResolvedValue(false);
+    repository.classExists.mockResolvedValue(false);
 
     await expect(service.assign(data)).rejects.toMatchObject({
       statusCode: 404,
@@ -61,7 +61,7 @@ describe("ClassTeacherService", () => {
   it("should unassign a teacher from a class", async () => {
     const data = { classId: "class1", teacherId: "teacher1" };
 
-    repository.AssignmentExists.mockResolvedValue(true);
+    repository.assignmentExists.mockResolvedValue(true);
 
     await service.unassign(data);
 
