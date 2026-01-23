@@ -23,6 +23,7 @@ Esta aplicação foi construída com foco em **boas práticas de mercado**, incl
 
 O projeto segue uma arquitetura baseada em módulos:
 
+```bash
 src/
 ├── modules/
 │ ├── students/
@@ -38,6 +39,7 @@ src/
 ├── routes/
 ├── app.ts
 └── server.ts
+```
 
 
 ### Padrões adotados
