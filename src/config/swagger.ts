@@ -1,27 +1,36 @@
-import swaggerJSDoc from 'swagger-jsdoc';
+import type { Express } from "express";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 export const swaggerOptions: swaggerJSDoc.Options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Professor API',
-      description: 'API para gerenciamento acadêmico do professor',
-      version: '1.0.0',
+      title: "Professor API",
+      description: "API para gerenciamento acadêmico do professor",
+      version: "1.0.0",
     },
     servers: [
       {
-        url: 'http://localhost:3000/api/v1',
+        url: "http://localhost:3000/api",
+        description: "Servidor Local",
       },
     ],
     components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
+      // securitySchemes: {
+      // bearerAuth: {
+      //   type: 'http',
+      //   scheme: 'bearer',
+      //   bearerFormat: 'JWT',
+      // },
+      // },
     },
   },
-  apis: ['src/modules/**/*.ts'],
+  apis: ["src/**/*.ts"],
 };
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
+export function setupSwagger(app: Express) {
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}

@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ClassTeacherService } from "../classTeacher.service.js";
-import { exists } from "node:fs";
 import { AppError } from "../../../shared/errors/appError.js";
 
 describe("ClassTeacherService", () => {

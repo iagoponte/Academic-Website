@@ -8,8 +8,7 @@ import { enrollmentRoutes } from './modules/enrollment/enrollment.routes.js';
 import { gradeRoutes } from './modules/evaluationGrade/evalGrade.routes.js';
 import { evaluationRoutes } from './modules/evaluation/evaluation.routes.js';
 import { reportCardRoutes } from './modules/report-card/reportCard.routes.js';
-import { swaggerOptions } from './config/swagger.js';
-import swaggerUi from 'swagger-ui-express'
+import { setupSwagger } from './config/swagger.js';
 
 const app = express();
 app.use(express.json());
@@ -24,11 +23,6 @@ app.get('/health', (req, res) => {
   return res.json({ ok: true });
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
-app.get('/api-docs.json', (_, res) => {
-  res.json(swaggerOptions);
-});
-
 app.use('/api/students', studentRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/class-teacher', classTeacherRoutes);
@@ -39,5 +33,8 @@ app.use('/api/evaluations', evaluationRoutes)
 app.use('/api/report-card', reportCardRoutes)
 
 app.use(globalErrorHandler);
+
+//swagger
+setupSwagger(app);
 
 export {app}
