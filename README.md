@@ -29,6 +29,8 @@ src/
 ├── infraestructure/
 |   ├── generated/
 |   └── prisma/
+├── middlewares/
+|   └── tests/
 ├── modules/
 | └── classTeacher/
 |   ├── schema/
