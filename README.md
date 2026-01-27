@@ -25,6 +25,10 @@ O projeto segue uma arquitetura baseada em módulos:
 
 ```bash
 src/
+├── config/
+├── infraestructure/
+|   ├── generated/
+|   └── prisma/
 ├── modules/
 | └── classTeacher/
 |   ├── schema/
