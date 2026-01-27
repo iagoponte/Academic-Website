@@ -26,16 +26,34 @@ O projeto segue uma arquitetura baseada em módulos:
 ```bash
 src/
 ├── modules/
-│ ├── students/
-│ ├── teachers/
-│ ├── classes/
-│ ├── enrollments/
-│ ├── evaluations/
-│ └── report-cards/
+| └── classTeacher/
+|   ├── schema/
+|   └── tests/
+│ └── discipline(class)/
+|   ├── schema/
+|   └── tests/
+│ └── enrollment/
+|   ├── schema/
+|   └── tests/
+│ └── evaluation/
+|   ├── schema/
+|   └── tests/
+│ └── evaluationGrade/
+|   ├── schema/
+|   └── tests/
+│ └── report-card/
+|   ├── schema/
+|   └── tests/
+│ └── student/
+|   ├── schema/
+|   └── tests/
+| └── teacher/
+|   ├── schema/
+|   └── tests/
 ├── shared/
-│ ├── prisma/
 │ ├── errors/
-│ └── swagger/
+│ ├── http/
+│ └── utils/
 ├── routes/
 ├── app.ts
 └── server.ts
