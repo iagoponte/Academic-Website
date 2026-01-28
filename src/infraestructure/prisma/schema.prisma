@@ -14,14 +14,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  Teacher
+  Student
+  Administrator
+  Coordinator
+  Director
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  roles Role []
+
+  student Student?
+  teacher Teacher?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Student {
   id           String  @id @default(uuid())
   name         String
-  email        String  @unique
+  userId       String @unique
   registrationNumber String   @unique
   isActive     Boolean @default(true)
 
   enrollments Enrollment[]
+  user User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -30,10 +52,10 @@ model Student {
 model Teacher {
   id    String @id @default(uuid())
   name  String
-  email String @unique
-  password String
+  userId String @unique
 
   classes ClassTeacher[]
+  user User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -97,7 +119,6 @@ model Evaluation {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // no evaluation type repetition in the same class
   @@unique([classId, type]) 
 }
 
