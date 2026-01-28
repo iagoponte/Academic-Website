@@ -9,6 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const Role = {
+  Teacher: 'Teacher',
+  Student: 'Student',
+  Administrator: 'Administrator',
+  Coordinator: 'Coordinator',
+  Director: 'Director'
+} as const
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+
 export const EvaluationType = {
   AV1: 'AV1',
   AV2: 'AV2',
