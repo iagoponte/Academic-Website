@@ -12,7 +12,7 @@ export const swaggerOptions: swaggerJSDoc.Options = {
     },
     servers: [
       {
-        url: "http://localhost:3000/api",
+        url: "http://localhost:3000",
         description: "Servidor Local",
       },
     ],
@@ -28,6 +28,7 @@ export const swaggerOptions: swaggerJSDoc.Options = {
   },
   apis: ["src/**/*.ts"],
 };
+// swagger route: http://localhost:3000/api/docs/
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 

@@ -19,6 +19,9 @@ app.use((req, res, next) => {
   next();
 });
 
+//swagger
+setupSwagger(app);
+
 app.get('/health', (req, res) => {
   console.log('Health check endpoint called');
   return res.json({ ok: true });
@@ -35,8 +38,5 @@ app.use('/api/report-card', reportCardRoutes)
 app.use('/api/users', userRoutes)
 
 app.use(globalErrorHandler);
-
-//swagger
-setupSwagger(app);
 
 export {app}
