@@ -9,6 +9,7 @@ import { gradeRoutes } from './modules/evaluationGrade/evalGrade.routes.js';
 import { evaluationRoutes } from './modules/evaluation/evaluation.routes.js';
 import { reportCardRoutes } from './modules/report-card/reportCard.routes.js';
 import { setupSwagger } from './config/swagger.js';
+import { userRoutes } from './modules/user/user.routes.js';
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,7 @@ app.use('/api/enrollments', enrollmentRoutes)
 app.use('/api/grades', gradeRoutes)
 app.use('/api/evaluations', evaluationRoutes)
 app.use('/api/report-card', reportCardRoutes)
+app.use('/api/users', userRoutes)
 
 app.use(globalErrorHandler);
 
