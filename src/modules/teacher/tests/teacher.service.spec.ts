@@ -18,6 +18,7 @@ describe('TeacherService', () => {
     beforeEach(() => {
         repository = {
           findByEmail: vi.fn(),
+          findUserByEmail: vi.fn(),
           create: vi.fn(),
           findAll: vi.fn(),
           findById: vi.fn(),
@@ -46,7 +47,7 @@ describe('TeacherService', () => {
     });
 
     it('should throw error if email already exists', async () => {
-        repository.findByEmail.mockResolvedValue(TeacherEntity);
+        repository.findUserByEmail.mockResolvedValue(TeacherEntity);
 
         await expect(
             service.create({
@@ -96,7 +97,6 @@ describe('TeacherService', () => {
         repository.update.mockResolvedValue({
             ...TeacherEntity,
             name: 'Jane Updated',
-            email: 'jane.updated@email.com',
         });
 
         const result = await service.update('uuid', { name: 'Jane Updated' });
@@ -104,7 +104,6 @@ describe('TeacherService', () => {
         expect(repository.findById).toHaveBeenCalledOnce();
         expect(repository.update).toHaveBeenCalledOnce();
         expect(result.name).toBe('Jane Updated');
-        expect(result.email).toBe('jane.updated@email.com');
     });
 
     // =========================

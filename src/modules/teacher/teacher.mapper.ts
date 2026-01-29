@@ -5,8 +5,11 @@ export class TeacherMapper {
     static toResponse(teacher: Teacher): TeacherResponseDTO {
         return {
             id: teacher.id,
+            userId: teacher.userId,
             name: teacher.name,
-            email: teacher.email,
+            
+            email: teacher.user?.email ?? "", 
+            
             createdAt: teacher.createdAt,
             updatedAt: teacher.updatedAt,
         }
