@@ -51,8 +51,6 @@ export const createTeacherSchema = z.object({
   password: z.string().min(6, "Password has to be at least 6 characters long"),
 });
 
-// No Update, só permitimos mudar o nome do perfil.
-// Email e Senha pertencem ao User agora.
 export const updateTeacherSchema = z.object({
   name: z.string().min(3).optional(),
 });
