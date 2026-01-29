@@ -3,7 +3,7 @@
  * @openapi
  * components:
  *   schemas:
- *     ReportCard:
+ *     ReportCardResponse:
  *       type: object
  *       required:
  *         - student
@@ -56,7 +56,6 @@
  *           type: string
  *           format: date-time
  *           example: 2024-06-30T14:30:00.000Z
- *
  *     ReportCardEvaluation:
  *       type: object
  *       required:
@@ -76,7 +75,6 @@
  *           format: float
  *           nullable: true
  *           example: 8.5
- *
  *     ErrorResponse:
  *       type: object
  *       properties:

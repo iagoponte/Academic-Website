@@ -3,40 +3,75 @@ import { z } from 'zod';
 /**
  * @openapi
  * components:
- * schemas:
- * CreateStudent:
- * type: object
- * required:
- * - name
- * - email
- * - password
- * - registrationNumber
- * properties:
- * name:
- * type: string
- * email:
- * type: string
- * format: email
- * password:
- * type: string
- * minLength: 6
- * registrationNumber:
- * type: string
- * StudentResponse:
- * type: object
- * properties:
- * id:
- * type: string
- * registrationNumber:
- * type: string
- * name:
- * type: string
- * email:
- * type: string
- * description: "Vem do relacionamento com User"
- * status:
- * type: string
- * enum: [ACTIVE, INACTIVE]
+ *   schemas:
+ *     CreateStudent:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *         - registrationNumber
+ *       properties:
+ *         name:
+ *           type: string
+ *           minLength: 3
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+ *           minLength: 6
+ *         registrationNumber:
+ *           type: string
+ *           minLength: 10
+ *           maxLength: 10
+ *     UpdateStudent:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         isActive:
+ *           type: boolean
+ *     CorrectStudentRegistration:
+ *       type: object
+ *       required:
+ *         - newRegistrationNumber
+ *         - reason
+ *       properties:
+ *         newRegistrationNumber:
+ *           type: string
+ *         reason:
+ *           type: string
+ *     StudentResponse:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         userId:
+ *           type: string
+ *         registrationNumber:
+ *           type: string
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *           description: "Vem do relacionamento com User"
+ *         status:
+ *           type: string
+ *           enum: [ACTIVE, INACTIVE]
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         statusCode:
+ *           type: integer
+ *         message:
+ *           type: string
  */
 
 export const createStudentSchema = z.object({
