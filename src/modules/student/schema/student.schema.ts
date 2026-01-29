@@ -1,103 +1,58 @@
 import { z } from 'zod';
 
-//Swagger Documentation
 /**
  * @openapi
  * components:
- *   schemas:
- *     CreateStudent:
- *       type: object
- *       required:
- *         - name
- *         - email
- *         - registrationNumber
- *       properties:
- *         name:
- *           type: string
- *           example: Maria Souza
- *         email:
- *           type: string
- *           format: email
- *           example: maria.souza@email.com
- *         registrationNumber:
- *           type: string
- *           example: 202400123
- *
- *     UpdateStudent:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           example: Maria Souza Atualizada
- *         email:
- *           type: string
- *           format: email
- *           example: maria.nova@email.com
- *
- *     CorrectStudentRegistration:
- *       type: object
- *       required:
- *         - newRegistrationNumber
- *         - reason
- *       properties:
- *         newRegistrationNumber:
- *           type: string
- *           example: 202400999
- *         reason:
- *           type: string
- *           example: Erro de digitação na matrícula original
- *
- *     StudentResponse:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           example: uuid
- *         registrationNumber:
- *           type: string
- *           example: 202400123
- *         name:
- *           type: string
- *           example: Maria Souza
- *         email:
- *           type: string
- *           format: email
- *           example: maria.souza@email.com
- *         status:
- *           type: string
- *           enum: [ACTIVE, INACTIVE]
- *           example: ACTIVE
- *         createdAt:
- *           type: string
- *           format: date-time
- *           example: 2026-01-20T10:00:00.000Z
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           example: 2026-01-20T10:00:00.000Z
- *
- *     ErrorResponse:
- *       type: object
- *       properties:
- *         statusCode:
- *           type: number
- *           example: 400
- *         error:
- *           type: string
- *           example: Bad Request
- *         message:
- *           type: string
- *           example: Validation error
+ * schemas:
+ * CreateStudent:
+ * type: object
+ * required:
+ * - name
+ * - email
+ * - password
+ * - registrationNumber
+ * properties:
+ * name:
+ * type: string
+ * email:
+ * type: string
+ * format: email
+ * password:
+ * type: string
+ * minLength: 6
+ * registrationNumber:
+ * type: string
+ * StudentResponse:
+ * type: object
+ * properties:
+ * id:
+ * type: string
+ * registrationNumber:
+ * type: string
+ * name:
+ * type: string
+ * email:
+ * type: string
+ * description: "Vem do relacionamento com User"
+ * status:
+ * type: string
+ * enum: [ACTIVE, INACTIVE]
  */
 
 export const createStudentSchema = z.object({
-  name: z.string().min(3, "Name too short"),
-  email: z.string().email("E-mail invalid"),
-  registrationNumber: z.string().length(10),
+  name: z.string().min(3, "Nome muito curto"),
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+  registrationNumber: z.string().length(10, "Matrícula deve ter 10 caracteres"),
 });
 
-export const updateStudentSchema = createStudentSchema
-.extend({
-  isActive: z.boolean()
-})
-.partial();
+// Apenas dados cadastrais do aluno
+export const updateStudentSchema = z.object({
+    name: z.string().min(3).optional(),
+    isActive: z.boolean().optional(),
+});
+
+export const correctStudentRegistrationSchema = z.object({
+  newRegistrationNumber: z.string().length(10, "A nova matrícula deve ter 10 caracteres"),
+  reason: z.string().min(5, "O motivo é obrigatório e deve ser detalhado"),
+});

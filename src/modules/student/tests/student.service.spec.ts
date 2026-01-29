@@ -9,6 +9,7 @@ describe('StudentService', () => {
   const studentEntity = {
     id: 'uuid',
     name: 'John Doe',
+    userId: 'uuid',
     email: 'john@email.com',
     registrationNumber: '1234567890',
     isActive: true,
@@ -19,6 +20,8 @@ describe('StudentService', () => {
   beforeEach(() => {
     repository = {
       findByRegistrationNumber: vi.fn(),
+      findUserByEmail: vi.fn(),
+      updateRegistration: vi.fn(),
       create: vi.fn(),
       findAll: vi.fn(),
       findById: vi.fn(),
@@ -39,6 +42,7 @@ describe('StudentService', () => {
     const result = await service.create({
       name: 'John Doe',
       email: 'john@email.com',
+      password: 'çalskjdfçlakjsdf',
       registrationNumber: '1234567890',
     });
 
@@ -54,6 +58,7 @@ describe('StudentService', () => {
       service.create({
         name: 'John',
         email: 'john@email.com',
+        password: 'çalskjdfçlakjsdf',
         registrationNumber: '1234567890',
       }),
     ).rejects.toBeInstanceOf(AppError);
@@ -140,7 +145,7 @@ describe('StudentService', () => {
   it('should correct registration number', async () => {
     repository.findByRegistrationNumber.mockResolvedValue(null);
     repository.findById.mockResolvedValue(studentEntity);
-    repository.update.mockResolvedValue({
+    repository.updateRegistration.mockResolvedValue({
       ...studentEntity,
       registrationNumber: '9999999999',
     });

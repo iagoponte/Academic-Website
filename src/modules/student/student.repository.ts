@@ -1,46 +1,44 @@
 import { prisma } from "../../infraestructure/prisma/client.js";
-// import type { Student } from "../../infraestructure/generated/prisma/client.js";
+import { Role } from "../../infraestructure/generated/prisma/enums.js";
 import type { Student } from './student.entity.js';
-import type { CreateStudentDTO, UpdateStudentDTO } from "./student.dto.js";
+import type { CorrectStudentRegistrationDTO, CreateStudentDTO, UpdateStudentDTO } from "./student.dto.js";
 import { removeUndefined } from "../../shared/utils/removeUndefined.js";
 
-const studentSelect = {
-  id: true,
-  name: true,
-  email: true,
-  registrationNumber: true,
-  isActive: true,
-  createdAt: true,
-  updatedAt: true,
+const studentInclude = {
+  user: {
+    select: {
+      email: true
+    }
+  }
 };
-
-// use cases where i don't want to expose email.
-const studentSafeSelect = {
-    id: true,
-    name: true,
-    registrationNumber: true,
-    isActive: true,
-}
 
 export class StudentRepository {
 
   async findById(id: string): Promise<Student | null> {
     return prisma.student.findUnique({
       where: { id },
-      select: studentSelect,
+      include: studentInclude,
     });
   }
+
+  async findUserByEmail(email: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+  return Boolean(user);
+}
 
   async findByRegistrationNumber(registrationNumber: string): Promise<Student | null> {
     return prisma.student.findUnique({
       where: { registrationNumber },
-      select: studentSelect,
+      include: studentInclude,
     });
   }
 
   async findAll(): Promise<Student[]> {
     return prisma.student.findMany({
-      select: studentSelect,
+      include: studentInclude,
       orderBy: { name: 'asc' },
     });
   }
@@ -50,15 +48,35 @@ export class StudentRepository {
       where: { id },
       select: { id: true },
     });
-
     return Boolean(student);
   }
 
   async create(data: CreateStudentDTO): Promise<Student> {
-    return prisma.student.create({
-      data,
-      select: studentSelect,
+    
+    // A query agora cria um USER, que conecta um STUDENT.
+    const createdUser = await prisma.user.create({
+      data: {
+        email: data.email,
+        password: data.password, 
+        roles: [Role.Student],
+        student: {
+          create: {
+            name: data.name,
+            registrationNumber: data.registrationNumber,
+          }
+        }
+      },
+      include: {
+        student: {
+            include: { user: { select: { email: true } } }
+        }
+      }
     });
+
+    // O Prisma retorna o User com o Student dentro. Precisamos retornar o Student.
+    if (!createdUser.student) throw new Error("Erro fatal na criação do estudante");
+    
+    return createdUser.student;
   }
 
   async update(id: string, data: UpdateStudentDTO): Promise<Student> {
@@ -66,7 +84,19 @@ export class StudentRepository {
     return prisma.student.update({
       where: { id },
       data: clearData,
-      select: studentSelect,
+      include: studentInclude,
     });
   }
-}   
+
+  async updateRegistration(id: string, newRegistrationNumber: string): Promise<Student> {
+    return prisma.student.update({
+        where: { id },
+        data: {
+            registrationNumber: newRegistrationNumber // Passa direto
+        },
+        include: {
+            user: { select: { email: true } }
+        }
+    });
+}
+}

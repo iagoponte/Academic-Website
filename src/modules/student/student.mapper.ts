@@ -6,12 +6,15 @@ export class StudentMapper {
     static toResponse(student: Student): StudentResponseDTO {
         return {
             id: student.id,
+            userId: student.userId,
             registrationNumber: student.registrationNumber,
             name: student.name,
-            email: student.email,
+            
+            email: student.user?.email ?? "", 
+            
             status: student.isActive ? 'ACTIVE' : 'INACTIVE',
             createdAt: student.createdAt,
             updatedAt: student.updatedAt,
-        }
+        };
     }
 }
