@@ -23,7 +23,7 @@ export class UserRepository {
 
     async findAll(): Promise<User[]> {
         const prismaUsers = await prisma.user.findMany();
-        return prismaUsers.map(UserMapper.toDomain)
+        return prismaUsers.map(user => UserMapper.toDomain(user))
     }
 
     async create(data: CreateUserDTO): Promise<User> {

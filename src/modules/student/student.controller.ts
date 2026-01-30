@@ -8,68 +8,24 @@ import { correctStudentRegistrationSchema, createStudentSchema, updateStudentSch
 export class StudentController {
     private service = new StudentService(new StudentRepository());
 
-    //use arrow functions to preserve 'this' context, avoiding the need for .bind(this) on route handlers 
-
-    // create = async (req: Request, res: Response) => {
-    //     const validData = createStudentSchema.parse(req.body);
-    //     const student = await this.service.create(validData);
-    //     return res.status(201).json(student);
-    // };
-
-    // list = async (req: Request, res: Response) => {
-    //     const students = await this.service.list();
-    //     return res.json(students);
-    // };
-
-    // getById = async (req: Request, res: Response) => {
-    //     const id = getStringParam(req, 'id');
-    //     const student = await this.service.getById(id);
-    //     return res.json(student);
-    // };
-
-    // //after registration, the email update is no longer validated...
-    // // update already does what correctRegistration was supposed to do.
-    // update = async (req: Request, res: Response) => {
-    //     const id = getStringParam(req, 'id');
-        
-    //     const validData = updateStudentSchema.parse(req.body);
-    //     const student = await this.service.update(
-    //         id,
-    //         validData
-    //     );
-    //     return res.json(student);
-    // };
-
-    // inactivate = async (req: Request, res: Response) => {
-    //     const id = getStringParam(req, 'id');
-    //     const student = await this.service.inactivate(id);
-    //     return res.json(student);
-    // };
-
-    // correctRegistration = async (req: Request, res: Response) => {
-    //     const id = getStringParam(req, 'id');
-    //     const student = await this.service.correctRegistration(
-    //         id,
-    //         req.body,
-    //     );
-    //     return res.json(student);
-    // };
-
     create = async (req: Request, res: Response) => {
         const validData = createStudentSchema.parse(req.body);
         const student = await this.service.create(validData);
-        return res.status(201).json(student);
+        const studentResponse = StudentMapper.toResponse(student)
+        return res.status(201).json(studentResponse);
     };
 
     list = async (req: Request, res: Response) => {
         const students = await this.service.list();
-        return res.json(students);
+        const studentsResponse = students.map(student => StudentMapper.toResponse(student))
+        return res.json(studentsResponse);
     };
 
     getById = async (req: Request, res: Response) => {
         const id = getStringParam(req, 'id');
         const student = await this.service.getById(id);
-        return res.json(student);
+        const studentsResponse = StudentMapper.toResponse(student)
+        return res.json(studentsResponse);
     };
 
     update = async (req: Request, res: Response) => {
@@ -79,13 +35,15 @@ export class StudentController {
             id,
             validData
         );
-        return res.json(student);
+        const studentsResponse = StudentMapper.toResponse(student)
+        return res.json(studentsResponse);
     };
 
     inactivate = async (req: Request, res: Response) => {
         const id = getStringParam(req, 'id');
         const student = await this.service.inactivate(id);
-        return res.json(student);
+        const studentsResponse = StudentMapper.toResponse(student)
+        return res.json(studentsResponse);
     };
 
     correctRegistration = async (req: Request, res: Response) => {
@@ -95,6 +53,7 @@ export class StudentController {
             id,
             validData,
         );
-        return res.json(student);
+        const studentsResponse = StudentMapper.toResponse(student)
+        return res.json(studentsResponse);
     };
 };

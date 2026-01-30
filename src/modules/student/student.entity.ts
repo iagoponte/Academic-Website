@@ -2,12 +2,13 @@ export interface Student {
     id: string;
     userId: string;
     name: string;
+    email?: string;
     registrationNumber: string;
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
     
-    user?: {
-        email: string;
-    };
+    // user?: {
+    //     email: string;
+    // };
 }

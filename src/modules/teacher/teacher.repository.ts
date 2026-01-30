@@ -5,6 +5,7 @@ import type { Teacher } from "./teacher.entity.js";
 import type { Prisma } from "../../infraestructure/generated/prisma/client.js";
 import type { CreateTeacherDTO, UpdateTeacherDTO } from "./teacher.dto.js";
 import { removeUndefined } from "../../shared/utils/removeUndefined.js";
+import { TeacherMapper } from "./teacher.mapper.js";
 
 const teacherInclude = {
   user: {
@@ -15,39 +16,43 @@ const teacherInclude = {
 export class teacherRepository {
 
   async findById(id: string): Promise<Teacher | null> {
-    return prisma.teacher.findUnique({
+    const prismaTeacher = await prisma.teacher.findUnique({
       where: { id },
       include: teacherInclude,
     });
+    if(!prismaTeacher) return null;
+    return TeacherMapper.toDomain(prismaTeacher);
   }
 
   async findUserByEmail(email: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({
+    const prismaUser = await prisma.user.findUnique({
       where: { email },
       select: { id: true },
     });
-    return Boolean(user);
+    return Boolean(prismaUser);
   }
 
   async findByEmail(email: string): Promise<Teacher | null> {
-    return prisma.teacher.findFirst({
+    const prismaTeacher = await prisma.teacher.findFirst({
       where: {
         user: { email: email },
       },
       include: teacherInclude,
     });
+    if (!prismaTeacher) return null;
+    return TeacherMapper.toDomain(prismaTeacher);
   }
 
   async findAll(): Promise<Teacher[]> {
-    return prisma.teacher.findMany({
+    const prismaTeachers = await prisma.teacher.findMany({
       include: teacherInclude,
       orderBy: { name: "asc" },
     });
+    return prismaTeachers.map(teacher => TeacherMapper.toDomain(teacher))
   }
 
   async create(data: CreateTeacherDTO): Promise<Teacher> {
-    // Transação: Cria User e Teacher juntos
-    // OBS: Service deve mandar a senha já hasheada!
+    
     const createdUser = await prisma.user.create({
       data: {
         email: data.email,
@@ -67,16 +72,17 @@ export class teacherRepository {
     });
 
     if (!createdUser.teacher) throw new Error("Erro ao criar professor");
-    return createdUser.teacher;
+    return TeacherMapper.toDomain(createdUser.teacher);
   }
 
   async update(id: string, data: UpdateTeacherDTO): Promise<Teacher> {
     const clearData = removeUndefined(data);
-    return prisma.teacher.update({
+    const updatedTeacher = await prisma.teacher.update({
       where: { id },
       data: clearData,
       include: teacherInclude,
     });
+    return TeacherMapper.toDomain(updatedTeacher);
   }
 
   

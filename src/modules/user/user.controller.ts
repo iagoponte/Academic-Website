@@ -18,7 +18,7 @@ export class UserController {
 
     list = async (req: Request, res: Response) => {
         const users = await this.service.list();
-        const userResponse = users.map(UserMapper.toResponse)
+        const userResponse = users.map(user => UserMapper.toResponse(user))
         return res.json(userResponse);
     };
 

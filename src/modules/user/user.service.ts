@@ -1,7 +1,6 @@
 import { hash } from "bcryptjs";
 import { UserRepository } from "./user.repository.js";
 import { AppError } from "../../shared/errors/appError.js";
-import { UserMapper } from "./user.mapper.js";
 import type { CreateUserDTO, UpdateUserDTO, UserResponseDTO } from "./user.dtos.js";
 import type { User } from "./user.entity.js";
 
@@ -25,6 +24,12 @@ export class UserService {
     async list(): Promise<User[]> {
         const users = await this.repository.findAll();
         return users;
+    }
+
+    async getById(id: string): Promise<User> {
+        const user = await this.repository.findById(id);
+        if (!user) throw new AppError('User not found', 404);
+        return user;
     }
 
     async update(id: string, dto: UpdateUserDTO): Promise<User> {
