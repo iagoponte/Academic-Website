@@ -1,8 +1,12 @@
-declare namespace Express {
+import type { Role } from "../../../modules/user/user.entity.ts";
+
+declare module 'express-serve-static-core' {
   interface Request {
     user?: {
       id: string;
-      role: 'ADMIN' | 'TEACHER' | 'STUDENT';
+      roles: Role[];
     };
   }
 }
+
+export {}
