@@ -1,4 +1,4 @@
-import { teacherRepository } from "./teacher.repository.js";
+import { TeacherRepository } from "./teacher.repository.js";
 import type {
     CreateTeacherDTO,
     TeacherResponseDTO,
@@ -10,7 +10,7 @@ import { TeacherMapper } from "./teacher.mapper.js";
 import { hash } from "bcryptjs";
 
 export class TeacherService {
-    constructor(private readonly repository: teacherRepository) {}
+    constructor(private readonly repository: TeacherRepository) {}
 
     async create(dto: CreateTeacherDTO): Promise<Teacher> {
         const emailExists = await this.repository.findUserByEmail(dto.email);

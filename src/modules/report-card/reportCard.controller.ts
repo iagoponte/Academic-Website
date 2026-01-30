@@ -29,11 +29,8 @@ export class ReportCardController {
     // Retorna PDF (Usa Provider)
     generatePdf = async (req: Request, res: Response): Promise<Response> => {
         const id = getStringParam(req, 'id');
-
         const reportEntity = await this.service.generate(id);
-        // O PDF Provider sabe ler a Entidade
         const pdfBuffer = await this.pdfProvider.generate(reportEntity);
-
         return res
             .setHeader('Content-Type', 'application/pdf')
             .setHeader('Content-Disposition', 'inline; filename=boletim.pdf')
