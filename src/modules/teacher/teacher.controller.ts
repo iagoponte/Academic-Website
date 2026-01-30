@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
-import { teacherRepository } from "./teacher.repository.js";
+import { TeacherRepository } from "./teacher.repository.js";
 import { TeacherService } from "./teacher.service.js";
 import { createTeacherSchema, updateTeacherSchema } from "./schema/teacher.schema.js";
 import { getStringParam } from "../../shared/http/params.js";
 import { TeacherMapper } from "./teacher.mapper.js";
 
 export class TeacherController {
-    private service = new TeacherService(new teacherRepository());
+    private service = new TeacherService(new TeacherRepository());
 
     create = async (req: Request, res: Response) => {
         // Valida Nome, Email e Senha (necessários para criar User + Teacher)

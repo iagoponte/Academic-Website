@@ -1,77 +1,47 @@
 import type { Prisma, PrismaClient } from '../../infraestructure/generated/prisma/client.js';
 import { prisma } from '../../infraestructure/prisma/client.js';
 import type { CreateGradeDTO, UpdateGradeDTO } from './evalGrade.dto.js';
+import type { EvaluationGrade } from './evalGrade.entity.js';
+import { GradeMapper } from './evalGrade.mapper.js';
 
-/* ======================================================
- * SELECT PADRÃO (para uso com Mapper)
- * ====================================================== */
-
-export const gradeSelect = {
-  id: true,
-  value: true,
-  createdAt: true,
-  updatedAt: true,
-
-  enrollment: {
-    select: {
-      id: true,
-      student: {
-        select: {
-          id: true,
-          name: true,
-          registrationNumber: true,
-        },
-      },
-      class: {
-        select: {
-          id: true,
-          name: true,
-          semester: true,
-        },
-      },
+const gradeInclude = {
+    enrollment: {
+        include: {
+            student: true, // Traz dados do aluno
+            class: true    // Traz dados da turma
+        }
     },
-  },
-
-  evaluation: {
-    select: {
-      id: true,
-      type: true,
-      weight: true,
-    },
-  },
+    evaluation: true       // Traz dados da avaliação
 };
-
-
-export type GradeWithDetails = Prisma.EvaluationGradeGetPayload<{
-  select: typeof gradeSelect;
-}>;
 
 export class GradeRepository {
   /* ==========================================
    * CREATE – Lançar nota
    * ========================================== */
-  async create(data: CreateGradeDTO): Promise<GradeWithDetails> {
-    return prisma.evaluationGrade.create({
+  async create(data: CreateGradeDTO): Promise<EvaluationGrade> {
+    const prismaGrade = await prisma.evaluationGrade.create({
       data: {
         enrollmentId: data.enrollmentId,
         evaluationId: data.evaluationId,
         value: data.value,
       },
-      select: gradeSelect,
+      include: gradeInclude,
     });
+    return GradeMapper.toDomain(prismaGrade);
   }
 
   /* ==========================================
    * UPDATE – Ajustar nota
    * ========================================== */
-  async update(id: string, data: UpdateGradeDTO): Promise<GradeWithDetails> {
-    return prisma.evaluationGrade.update({
+  async update(id: string, data: UpdateGradeDTO): Promise<EvaluationGrade> {
+    const prismaGrade = await prisma.evaluationGrade.update({
       where: { id },
       data: {
         value: data.value,
       },
-      select: gradeSelect,
+      include: gradeInclude,
     });
+    return GradeMapper.toDomain(prismaGrade)
   }
 
   /* ==========================================
@@ -98,49 +68,54 @@ export class GradeRepository {
   // Boletim do aluno (por matrícula)
   async findByEnrollment(
     enrollmentId: string
-  ): Promise<GradeWithDetails[]> {
-    return prisma.evaluationGrade.findMany({
+  ): Promise<EvaluationGrade[]> {
+    const prismaGrades = await prisma.evaluationGrade.findMany({
       where: { enrollmentId },
-      select: gradeSelect,
+      include: gradeInclude,
       orderBy: {
         evaluation: { type: 'asc' },
       },
     });
+    return prismaGrades.map(grade => GradeMapper.toDomain(grade))
   }
 
   // Notas de uma avaliação (diário)
   async findByEvaluation(
     evaluationId: string
-  ): Promise<GradeWithDetails[]> {
-    return prisma.evaluationGrade.findMany({
+  ): Promise<EvaluationGrade[]> {
+    const prismaGrades = await prisma.evaluationGrade.findMany({
       where: { evaluationId },
-      select: gradeSelect,
+      include: gradeInclude,
       orderBy: {
         enrollment: {
           student: { name: 'asc' },
         },
       },
     });
+    return prismaGrades.map(grade => GradeMapper.toDomain(grade));
   }
 
   /* ==========================================
    * ADMIN
    * ========================================== */
 
-  async findAll(): Promise<GradeWithDetails[]> {
-    return prisma.evaluationGrade.findMany({
-      select: gradeSelect,
+  async findAll(): Promise<EvaluationGrade[]> {
+    const prismaGrades = await prisma.evaluationGrade.findMany({
+      include: gradeInclude,
       orderBy: {
         createdAt: 'desc',
       },
     });
+    return prismaGrades.map(grade => GradeMapper.toDomain(grade))
   }
 
-  async findById(id: string): Promise<GradeWithDetails | null> {
-    return prisma.evaluationGrade.findUnique({
+  async findById(id: string): Promise<EvaluationGrade | null> {
+    const prismaGrade = await prisma.evaluationGrade.findUnique({
       where: { id },
-      select: gradeSelect,
+      include: gradeInclude,
     });
+    if(!prismaGrade) return null;
+    return GradeMapper.toDomain(prismaGrade);
   }
 
   async delete(id: string): Promise<void> {

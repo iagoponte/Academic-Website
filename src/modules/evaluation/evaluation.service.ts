@@ -1,6 +1,7 @@
 import { AppError } from "../../shared/errors/appError.js";
 import type { ClassRepository } from "../discipline(class)/class.repository.js";
 import type { CreateEvaluationDTO, EvaluationResponseDTO, UpdateEvaluationDTO } from "./evaluation.dto.js";
+import type { Evaluation } from "./evaluation.entity.js";
 import { EvaluationMapper } from "./evaluation.mapper.js";
 import type { EvaluationRepository } from "./evaluation.repository.js";
 
@@ -13,7 +14,7 @@ export class EvaluationService {
 
   async create(
     dto: CreateEvaluationDTO
-  ): Promise<EvaluationResponseDTO> {
+  ): Promise<Evaluation> {
 
     const classExists =
       await this.classRepository.exists(dto.classId);
@@ -29,37 +30,37 @@ export class EvaluationService {
       classId: dto.classId
     });
 
-    return EvaluationMapper.toResponse(evaluation);
+    return evaluation;
   }
 
   async listByClass(
     classId: string
-  ): Promise<EvaluationResponseDTO[]> {
+  ): Promise<Evaluation[]> {
     const evaluations =
       await this.repository.findByClass(classId);
 
-    return evaluations.map(EvaluationMapper.toResponse);
+    return evaluations;
   }
 
-  async getById(id: string): Promise<EvaluationResponseDTO> {
+  async getById(id: string): Promise<Evaluation> {
     const evaluation = await this.repository.findById(id);
 
     if (!evaluation) {
       throw new AppError('Avaliação não encontrada', 404);
     }
 
-    return EvaluationMapper.toResponse(evaluation);
+    return evaluation;
   }
 
-  async listAll(): Promise<EvaluationResponseDTO[]> {
+  async listAll(): Promise<Evaluation[]> {
     const evaluations = await this.repository.findAll();
-    return evaluations.map(EvaluationMapper.toResponse);
+    return evaluations;
   }
 
   async update(
     id: string,
     dto: UpdateEvaluationDTO
-  ): Promise<EvaluationResponseDTO> {
+  ): Promise<Evaluation> {
 
     await this.getById(id);
 
@@ -69,7 +70,7 @@ export class EvaluationService {
       ...(dto.description !== undefined && { description: dto.description }),
     });
 
-    return EvaluationMapper.toResponse(evaluation);
+    return evaluation;
   }
 
   async delete(id: string): Promise<void> {

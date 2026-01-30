@@ -3,36 +3,42 @@ import { getStringParam } from "../../shared/http/params.js";
 import { ClassRepository } from "../discipline(class)/class.repository.js";
 import { EvaluationRepository } from "./evaluation.repository.js";
 import { EvaluationService } from "./evaluation.service.js";
+import { EvaluationMapper } from "./evaluation.mapper.js";
 
 export class EvaluationController {
   private service = new EvaluationService(new EvaluationRepository(), new ClassRepository());
 
   create = async (req: Request, res: Response) => {
     const evaluation = await this.service.create(req.body);
-    return res.status(201).json(evaluation);
+    const evaluationResponse = EvaluationMapper.toResponse(evaluation)
+    return res.status(201).json(evaluationResponse);
   };
 
   listByClass = async (req: Request, res: Response) => {
     const classId = getStringParam(req, 'classId');
     const evaluations = await this.service.listByClass(classId);
-    return res.json(evaluations);
+    const evaluationsResponse = evaluations.map(evaluation => EvaluationMapper.toResponse(evaluation))
+    return res.json(evaluationsResponse)
   };
 
   getById = async (req: Request, res: Response) => {
     const id = getStringParam(req, 'id');
     const evaluation = await this.service.getById(id);
-    return res.json(evaluation);
+    const evaluationResponse = EvaluationMapper.toResponse(evaluation)
+    return res.json(evaluationResponse);
   };
 
   listAll = async (_: Request, res: Response) => {
     const evaluations = await this.service.listAll();
-    return res.json(evaluations);
+    const evaluationsResponse = evaluations.map(evaluation => EvaluationMapper.toResponse(evaluation))
+    return res.json(evaluationsResponse)
   };
 
   update = async (req: Request, res: Response) => {
     const id = getStringParam(req, 'id');
     const evaluation = await this.service.update(id, req.body);
-    return res.json(evaluation);
+    const evaluationResponse = EvaluationMapper.toResponse(evaluation)
+    return res.json(evaluationResponse);
   };
 
   delete = async (req: Request, res: Response) => {

@@ -13,7 +13,7 @@ const teacherInclude = {
   },
 };
 
-export class teacherRepository {
+export class TeacherRepository {
 
   async findById(id: string): Promise<Teacher | null> {
     const prismaTeacher = await prisma.teacher.findUnique({

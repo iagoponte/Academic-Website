@@ -3,4 +3,10 @@ export interface ClassEntity {
     name: string;
     semester: string;
     createdAt: Date;
+    
+    teachers?: {
+        id: string;
+        name: string;
+        email: string;
+    }[];
 }

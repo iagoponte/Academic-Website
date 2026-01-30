@@ -5,6 +5,7 @@ import { EnrollmentRepository } from '../enrollment/enrollment.repository.js';
 import { get } from 'node:http';
 import { getStringParam } from '../../shared/http/params.js';
 import { EvaluationRepository } from '../evaluation/evaluation.repository.js';
+import { GradeMapper } from './evalGrade.mapper.js';
 
 export class GradeController {
     private gradeService = new GradeService(new GradeRepository(), new EnrollmentRepository(), new EvaluationRepository());
@@ -15,7 +16,8 @@ export class GradeController {
    * ========================= */
   create = async (req: Request, res: Response) => {
     const grade = await this.gradeService.create(req.body);
-    return res.status(201).json(grade);
+    const gradeResponse = GradeMapper.toResponse(grade)
+    return res.status(201).json(gradeResponse);
   };
 
   /* =========================
@@ -24,7 +26,8 @@ export class GradeController {
   update = async (req: Request, res: Response) => {
     const id = getStringParam(req, 'id');
     const grade = await this.gradeService.update(id, req.body);
-    return res.json(grade);
+    const gradeResponse = GradeMapper.toResponse(grade);
+    return res.json(gradeResponse);
   };
 
   /* =========================
@@ -36,7 +39,8 @@ export class GradeController {
     const enrollmentId = getStringParam(req, 'enrollmentId');
     const grades =
       await this.gradeService.listByEnrollment(enrollmentId);
-    return res.json(grades);
+    const gradesResponse = grades.map(grade => GradeMapper.toResponse(grade))
+    return res.json(gradesResponse);
   };
 
   // Diário de notas
@@ -44,20 +48,23 @@ export class GradeController {
     const evaluationId = getStringParam(req, 'evaluationId');
     const grades =
       await this.gradeService.listByEvaluation(evaluationId);
-    return res.json(grades);
+    const gradesResponse = grades.map(grade => GradeMapper.toResponse(grade))
+    return res.json(gradesResponse);
   };
 
  // ADMIN
 
   listAll = async (_: Request, res: Response) => {
     const grades = await this.gradeService.listAll();
-    return res.json(grades);
+    const gradesResponse = grades.map(grade => GradeMapper.toResponse(grade))
+    return res.json(gradesResponse);
   };
 
   getById = async (req: Request, res: Response) => {
     const id = getStringParam(req, 'id');
     const grade = await this.gradeService.getById(id);
-    return res.json(grade);
+    const gradeResponse = GradeMapper.toResponse(grade)
+    return res.json(gradeResponse);
   };
 
   delete = async (req: Request, res: Response) => {

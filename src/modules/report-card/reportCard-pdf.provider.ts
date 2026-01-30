@@ -1,57 +1,123 @@
-import PDFDocument from 'pdfkit';
+import PDFDocument from 'pdfkit-table';
 import type { ReportCardDTO } from './reportCard.dto.js';
+import type { ReportCard } from './reportCard.entity.js';
 
 export class ReportCardPdfProvider {
-  generate(report: ReportCardDTO): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      const doc = new PDFDocument({ 
-        margin: 50,
-      });
-      const buffers: Buffer[] = [];
+  // generate(report: ReportCardDTO): Promise<Buffer> {
+  //   return new Promise((resolve, reject) => {
+  //     const doc = new PDFDocument({ 
+  //       margin: 50,
+  //     });
+  //     const buffers: Buffer[] = [];
 
       
+  //     doc.on('data', chunk => buffers.push(chunk));
+  //     doc.on('end', () => resolve(Buffer.concat(buffers)));
+  //     doc.on('error', reject);
+
+  //     doc.font('Times-Roman');
+  //     doc.fontSize(18).text('Histórico Acadêmico', { align: 'center' });
+  //     // doc.moveDown();
+  //     doc.fontSize(14).text(`${report.class.semester}`, { align: 'center' });
+
+  //     doc.fontSize(12).text(`Aluno: ${report.student.name}`);
+  //     doc.moveDown(0.5);
+  //     doc.text(`Matrícula: ${report.student.registrationNumber}`);
+  //     doc.moveDown(0.5);
+  //     doc.text(`Disciplina: ${report.class.name}`);
+
+  //     doc.moveDown(2);
+  //     // doc.fontSize(14).text('Avaliações:');
+  //     doc.moveDown(1);
+
+  //     doc.table({
+  //       rowStyles: (i) => {
+  //         return i < 1 
+  //         ? { border: [0, 0, 2, 0], borderColor: "black", align: 'center' }
+  //         : { border: [0, 0, 1, 0], borderColor: "#aaa", align: 'center'}; 
+  //       },
+  //       data: [
+  //         ['Avaliação', 'Peso', 'Nota' ],
+  //         ...report.evaluations.map(e => [
+  //           e.type,
+  //           e.weight.toString(),
+  //           e.grade !== null ? e.grade.toString() : '-'
+  //         ])
+  //       ]
+  //     });
+
+  //     doc.moveDown(3);
+  //     doc.text(`Média Final: ${report.average}`, { align: 'right' });
+  //     doc.text(`Situação: ${report.status}`, { align: 'right' });
+
+  //     doc.moveDown();
+  //     doc.fontSize(10).text(
+  //       `Gerado em: ${report.generatedAt.toLocaleDateString()}`,
+  //       { align: 'right' }
+  //     );
+
+  //     doc.end();
+  //   });
+  // }
+  generate(report: ReportCard): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      // Instância do PDFKitTable
+      const doc = new PDFDocument({ 
+        margin: 50,
+        size: 'A4'
+      });
+      
+      const buffers: Buffer[] = [];
+
       doc.on('data', chunk => buffers.push(chunk));
       doc.on('end', () => resolve(Buffer.concat(buffers)));
       doc.on('error', reject);
 
-      doc.font('Times-Roman');
-      doc.fontSize(18).text('Histórico Acadêmico', { align: 'center' });
-      // doc.moveDown();
-      doc.fontSize(14).text(`${report.class.semester}`, { align: 'center' });
+      // --- Cabeçalho ---
+      doc.font('Helvetica-Bold').fontSize(18).text('Histórico Acadêmico', { align: 'center' });
+      doc.moveDown(0.5);
+      doc.font('Helvetica').fontSize(14).text(`${report.classInfo.semester}`, { align: 'center' });
+      doc.moveDown(1.5);
 
+      // --- Dados do Aluno ---
       doc.fontSize(12).text(`Aluno: ${report.student.name}`);
       doc.moveDown(0.5);
       doc.text(`Matrícula: ${report.student.registrationNumber}`);
       doc.moveDown(0.5);
-      doc.text(`Disciplina: ${report.class.name}`);
-
+      doc.text(`Disciplina: ${report.classInfo.name}`);
       doc.moveDown(2);
-      // doc.fontSize(14).text('Avaliações:');
-      doc.moveDown(1);
 
-      doc.table({
-        rowStyles: (i) => {
-          return i < 1 
-          ? { border: [0, 0, 2, 0], borderColor: "black", align: 'center' }
-          : { border: [0, 0, 1, 0], borderColor: "#aaa", align: 'center'}; 
-        },
-        data: [
-          ['Avaliação', 'Peso', 'Nota' ],
-          ...report.evaluations.map(e => [
+      // --- Tabela (Usando pdfkit-table) ---
+      const table = {
+        title: "Avaliações",
+        headers: ["Avaliação", "Peso", "Nota"],
+        rows: report.evaluations.map(e => [
             e.type,
-            e.weight.toString(),
-            e.grade !== null ? e.grade.toString() : '-'
-          ])
-        ]
+            e.weight.toFixed(1), // Formata peso
+            e.grade !== null ? e.grade.toFixed(1) : '-' // Formata nota ou traço
+        ]),
+      };
+
+      // Desenha a tabela
+      doc.table(table, {
+        prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
+        prepareRow: () => doc.font("Helvetica").fontSize(10)
       });
 
-      doc.moveDown(3);
+      // --- Rodapé / Resumo ---
+      doc.moveDown(2);
+      doc.font('Helvetica-Bold').fontSize(12);
       doc.text(`Média Final: ${report.average}`, { align: 'right' });
-      doc.text(`Situação: ${report.status}`, { align: 'right' });
-
-      doc.moveDown();
-      doc.fontSize(10).text(
-        `Gerado em: ${report.generatedAt.toLocaleDateString()}`,
+      
+      // Cor condicional para o status
+      const statusColor = report.status === 'Aprovado' ? 'green' : (report.status === 'Reprovado' ? 'red' : 'orange');
+      
+      doc.fillColor(statusColor).text(`Situação: ${report.status}`, { align: 'right' });
+      
+      // Reset de cor e data
+      doc.fillColor('black').moveDown(2);
+      doc.fontSize(9).text(
+        `Gerado em: ${report.generatedAt.toLocaleDateString()} às ${report.generatedAt.toLocaleTimeString()}`,
         { align: 'right' }
       );
 

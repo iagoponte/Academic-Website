@@ -6,46 +6,58 @@ import { getStringParam } from '../../shared/http/params.js';
 import { EnrollmentRepository } from './enrollment.repository.js';
 import { StudentRepository } from '../student/student.repository.js';
 import { ClassRepository } from '../discipline(class)/class.repository.js';
+import { EnrollmentMapper } from './enrollment.mapper.js';
 
 export class EnrollmentController {
-  private service = new EnrollmentService(new EnrollmentRepository(), new StudentRepository(), new ClassRepository());
+    // Injeção de dependências correta
+    private service = new EnrollmentService(
+        new EnrollmentRepository(), 
+        new StudentRepository(), 
+        new ClassRepository()
+    );
 
-  // POST /enrollments
-  create = async (req: Request, res: Response): Promise<Response> => {
-    const data = createEnrollmentSchema.parse(req.body);
-    const enrollment = await this.service.create(data);
-    return res.status(201).json(enrollment);
-  }
+    create = async (req: Request, res: Response): Promise<Response> => {
+        const data = createEnrollmentSchema.parse(req.body);
+        
+        // 1. Recebe Entidade
+        const enrollment = await this.service.create(data);
+        
+        // 2. Converte para DTO
+        const response = EnrollmentMapper.toResponse(enrollment);
+        
+        return res.status(201).json(response);
+    }
 
-  // GET /enrollments/student/:studentId
-  listByStudent = async (req: Request, res: Response): Promise<Response> => {
-    const studentId = getStringParam(req, 'studentId');
-    const enrollments = await this.service.listByStudent(studentId);
-    return res.json(enrollments);
-  }
+    listByStudent = async (req: Request, res: Response): Promise<Response> => {
+        const studentId = getStringParam(req, 'studentId');
+        const enrollments = await this.service.listByStudent(studentId);
+        const response = enrollments.map(EnrollmentMapper.toResponse);
+        return res.json(response);
+    }
 
-  // GET /enrollments/class/:classId
-  listByClass = async (req: Request, res: Response): Promise<Response> => {
-    const classId = getStringParam(req, 'classId');
-    const enrollments = await this.service.listByClass(classId);
-    return res.json(enrollments);
-  }
+    listByClass = async (req: Request, res: Response): Promise<Response> => {
+        const classId = getStringParam(req, 'classId');
+        const enrollments = await this.service.listByClass(classId);
+        const response = enrollments.map(EnrollmentMapper.toResponse);
+        return res.json(response);
+    }
 
-  listAll = async (req: Request, res: Response): Promise<Response> => {
-    const enrollments = await this.service.listAll();
-    return res.json(enrollments);
-  }
+    listAll = async (req: Request, res: Response): Promise<Response> => {
+        const enrollments = await this.service.listAll();
+        const response = enrollments.map(EnrollmentMapper.toResponse);
+        return res.json(response);
+    }
 
-  getById = async (req: Request, res: Response): Promise<Response> => {
-    const id = getStringParam(req, 'id');
-    const enrollment = await this.service.getById(id);
-    return res.json(enrollment);
-  }
+    getById = async (req: Request, res: Response): Promise<Response> => {
+        const id = getStringParam(req, 'id');
+        const enrollment = await this.service.getById(id);
+        const response = EnrollmentMapper.toResponse(enrollment);
+        return res.json(response);
+    }
 
-  delete = async (req: Request, res: Response): Promise<Response> => {
-    const id = getStringParam(req, 'id');
-    await this.service.delete(id);
-    return res.status(204).send();
- }
-
+    delete = async (req: Request, res: Response): Promise<Response> => {
+        const id = getStringParam(req, 'id');
+        await this.service.delete(id);
+        return res.status(204).send();
+    }
 }

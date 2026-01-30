@@ -1,52 +1,76 @@
 import { prisma } from "../../infraestructure/prisma/client.js";
 import type { CreateClassDTO } from "./class.dto.js";
-import { classWithTeachersSelect, type ClassWithTeachers } from "./class.mapper.js";
+import type { ClassEntity } from "./class.entity.js";
+import { ClassMapper } from "./class.mapper.js";
 
+
+const classSelect = {
+    id: true,
+    name: true,
+    semester: true,
+    createdAt: true,
+    teachers: {
+        select: {
+            teacher: {
+                select: {
+                    id: true,
+                    name: true,
+                    // O email está no User!
+                    user: {
+                        select: { email: true }
+                    }
+                }
+            }
+        }
+    }
+};
 
 export class ClassRepository {
-    
-    // CRIAR: Salva a turma e já cria as linhas na tabela pivô 'ClassTeacher'
-  async create(data: CreateClassDTO): Promise<ClassWithTeachers> {
-    return prisma.class.create({
-      data: {
-        name: data.name,
-        semester: data.semester,
 
-        ...(data.teacherIds && {
-          teachers: {
-            create: data.teacherIds.map(teacherId => ({
-              teacher: { connect: { id: teacherId } },
-            })),
-          },
-        }),
-      },
-      select: classWithTeachersSelect,
-    });
-  }
+    async create(data: CreateClassDTO): Promise<ClassEntity> {
+        const prismaClass = await prisma.class.create({
+            data: {
+                name: data.name,
+                semester: data.semester,
+                ...(data.teacherIds && {
+                    teachers: {
+                        create: data.teacherIds.map(teacherId => ({
+                            teacher: { connect: { id: teacherId } },
+                        })),
+                    },
+                }),
+            },
+            select: classSelect,
+        });
+        return ClassMapper.toDomain(prismaClass as any); // Cast seguro devido à complexidade do select
+    }
 
-  // Listar todas as turmas
-  async findAll(): Promise<ClassWithTeachers[]> {
-    return prisma.class.findMany({
-      select: classWithTeachersSelect,
-      orderBy: { createdAt: 'desc' },
-    });
-  }
+    async findAll(): Promise<ClassEntity[]> {
+        const prismaClasses = await prisma.class.findMany({
+            select: classSelect,
+            orderBy: { createdAt: 'desc' },
+        });
+        // OBS: Usamos 'as any' aqui momentaneamente pois o tipo inferido do Select 
+        // profundo do Prisma às vezes confunde o TS, mas a estrutura bate com o Mapper.
+        return prismaClasses.map(c => ClassMapper.toDomain(c as any));
+    }
 
-  // Buscar turma por ID
-  async findById(id: string): Promise<ClassWithTeachers | null> {
-    return prisma.class.findUnique({
-      where: { id },
-      select: classWithTeachersSelect,
-    });
-  }
+    async findById(id: string): Promise<ClassEntity | null> {
+        const prismaClass = await prisma.class.findUnique({
+            where: { id },
+            select: classSelect,
+        });
 
-  // Verificar existência da turma
-  async exists(id: string): Promise<boolean> {
-    const classEntity = await prisma.class.findUnique({
-      where: { id },
-      select: { id: true },
-    });
+        if (!prismaClass) return null;
 
-    return Boolean(classEntity);
-  }
+        return ClassMapper.toDomain(prismaClass as any);
+    }
+
+    async exists(id: string): Promise<boolean> {
+        const classEntity = await prisma.class.findUnique({
+            where: { id },
+            select: { id: true },
+        });
+        return Boolean(classEntity);
+    }
 }

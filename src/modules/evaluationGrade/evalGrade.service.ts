@@ -2,6 +2,7 @@ import { AppError } from "../../shared/errors/appError.js";
 import type { EnrollmentRepository } from "../enrollment/enrollment.repository.js";
 import type { EvaluationRepository } from "../evaluation/evaluation.repository.js";
 import type { CreateGradeDTO, GradeResponseDTO, UpdateGradeDTO } from "./evalGrade.dto.js";
+import type { EvaluationGrade } from "./evalGrade.entity.js";
 import { GradeMapper } from "./evalGrade.mapper.js";
 import type { GradeRepository } from "./evalGrade.repository.js";
 
@@ -13,7 +14,7 @@ export class GradeService {
     private readonly evaluationRepository: EvaluationRepository
   ) {}
 
-  async create(dto: CreateGradeDTO): Promise<GradeResponseDTO> {
+  async create(dto: CreateGradeDTO): Promise<EvaluationGrade> {
     const alreadyExists = await this.gradeRepository.exists(
       dto.enrollmentId,
       dto.evaluationId
@@ -38,10 +39,10 @@ export class GradeService {
       throw new AppError('Avaliação não pertence à turma desta matrícula', 400);
     }
     const grade = await this.gradeRepository.create(dto);
-    return GradeMapper.toResponse(grade);
+    return grade;
   }
 
-  async update(id: string, dto: UpdateGradeDTO): Promise<GradeResponseDTO> {
+  async update(id: string, dto: UpdateGradeDTO): Promise<EvaluationGrade> {
     const existingGrade =
       await this.gradeRepository.findById(id);
 
@@ -51,36 +52,36 @@ export class GradeService {
 
     const updatedGrade =
       await this.gradeRepository.update(id, dto);
-    return GradeMapper.toResponse(updatedGrade);
+    return updatedGrade;
   }
 
   // Boletim (por matrícula)
-  async listByEnrollment(enrollmentId: string): Promise<GradeResponseDTO[]> {
+  async listByEnrollment(enrollmentId: string): Promise<EvaluationGrade[]> {
     const grades =
       await this.gradeRepository.findByEnrollment(enrollmentId);
-    return grades.map(GradeMapper.toResponse);
+    return grades;
   }
 
   // Diário (por avaliação)
-  async listByEvaluation(evaluationId: string): Promise<GradeResponseDTO[]> {
+  async listByEvaluation(evaluationId: string): Promise<EvaluationGrade[]> {
     const grades =
       await this.gradeRepository.findByEvaluation(evaluationId);
-    return grades.map(GradeMapper.toResponse);
+    return grades;
   }
 
   // ADMIN
-  async listAll(): Promise<GradeResponseDTO[]> {
+  async listAll(): Promise<EvaluationGrade[]> {
     const grades = await this.gradeRepository.findAll();
-    return grades.map(GradeMapper.toResponse);
+    return grades;
   }
 
-  async getById(id: string): Promise<GradeResponseDTO> {
+  async getById(id: string): Promise<EvaluationGrade> {
     const grade = await this.gradeRepository.findById(id);
 
     if (!grade) {
       throw new AppError('Nota não encontrada', 404);
     }
-    return GradeMapper.toResponse(grade);
+    return grade;
   }
 
   async delete(id: string): Promise<void> {
