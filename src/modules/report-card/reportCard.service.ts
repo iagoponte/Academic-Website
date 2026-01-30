@@ -12,39 +12,48 @@ export class ReportCardService {
   ) {}
 
   async generate(enrollmentId: string): Promise<ReportCard> {
-    // 1. Busca a Matrícula (Ponto de partida)
+    
     const enrollment = await this.enrollmentRepository.findById(enrollmentId);
+      if(!enrollment) {
+        throw new AppError('Enrollment not found', 404);
+      }
 
-    if (!enrollment) {
-      throw new AppError('Enrollment not found', 404);
-    }
-
-    // 2. Busca Avaliações e Notas em PARALELO (Mais rápido)
     const [evaluations, grades] = await Promise.all([
       this.evaluationRepository.findByClass(enrollment.classId),
       this.gradeRepository.findByEnrollment(enrollmentId)
     ]);
 
-    // 3. Mapeia as notas para acesso rápido (O(1))
+
+    // const totalWeight = evaluations.reduce((acc, curr) => acc + curr.weight, 0);
+    
     const gradesMap = new Map(
       grades.map(g => [g.evaluationId, g.value])
     );
 
-    // 4. Monta o resultado combinando Avaliação + Nota
-    const evaluationResults = evaluations.map(evaluation => ({
-      type: evaluation.type as string, // Converte Enum para string
-      weight: evaluation.weight,
-      grade: gradesMap.get(evaluation.id) ?? null
-    }));
+    const evaluationResults = evaluations.map(evaluation => {
+      const rawGrade = gradesMap.get(evaluation.id) ?? null;
+      
+      // let weightedGrade: number | null = null;
+      // weightedGrade = rawGrade !== null ? Number(((rawGrade * evaluation.weight) / totalWeight).toFixed(2)) : null;
+      //padrão funcional com nota ponderada, matematicamente correto.
+      const weightedGrade = rawGrade !== null 
+        ? Number((rawGrade * evaluation.weight).toFixed(2)) 
+        : null;
 
-    // 5. Cálculos de Domínio
+      return {
+        type: evaluation.type as string,
+        weight: evaluation.weight,
+        grade: rawGrade,        
+        weightedGrade: weightedGrade 
+      };
+    });
+
+    // 5. Cálculos de Domínio (Média Final)
     const average = this.calculateAverage(evaluationResults);
     const status = this.calculateStatus(average);
 
-    // 6. Retorna a Entidade
     return {
       student: {
-        // Usa o operador de coalescência caso o objeto venha undefined (segurança)
         name: enrollment.student?.name ?? "N/A",
         registrationNumber: enrollment.student?.registrationNumber ?? "N/A"
       },
@@ -59,9 +68,8 @@ export class ReportCardService {
     };
   }
 
-  private calculateAverage(
-    evaluations: { grade: number | null; weight: number }[]
-  ): number {
+  // O cálculo da média continua o mesmo (Soma Ponderada / Soma dos Pesos)
+  private calculateAverage(evaluations: { grade: number | null; weight: number }[]): number {
     let weightedSum = 0;
     let weightSum = 0;
 

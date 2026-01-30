@@ -89,19 +89,24 @@ export class ReportCardPdfProvider {
 
       // --- Tabela (Usando pdfkit-table) ---
       const table = {
-        title: "Avaliações",
-        headers: ["Avaliação", "Peso", "Nota"],
+        title: "Detalhamento de Notas",
+        // Adicionamos a coluna "Nota Final"
+        headers: ["Avaliação", "Peso", "Nota (0-10)", "Nota Ponderada"],
         rows: report.evaluations.map(e => [
             e.type,
-            e.weight.toFixed(1), // Formata peso
-            e.grade !== null ? e.grade.toFixed(1) : '-' // Formata nota ou traço
+            e.weight.toFixed(1),
+            // Coluna 3: Nota Original
+            e.grade !== null ? e.grade.toFixed(1) : '-',
+            // Coluna 4: Nota Ponderada (Novo)
+            e.weightedGrade !== null ? e.weightedGrade.toFixed(1) : '-'
         ]),
       };
 
       // Desenha a tabela
+      // Dica: Ajuste as larguras (width) se necessário, ou deixe automático
       doc.table(table, {
         prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
-        prepareRow: () => doc.font("Helvetica").fontSize(10)
+        prepareRow: () => doc.font("Helvetica").fontSize(10),
       });
 
       // --- Rodapé / Resumo ---

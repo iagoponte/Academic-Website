@@ -11,9 +11,9 @@ export interface ReportCardDTO {
     type: string;
     weight: number;
     grade: number | null;
+    weightedGrade: number | null;
   }[];
   average: number;
   status: 'Aprovado' | 'Reprovado' | 'Recuperação';
   generatedAt: Date;
 }
-
