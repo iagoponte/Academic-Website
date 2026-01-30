@@ -27,12 +27,12 @@ export class UserRepository {
     }
 
     async create(data: CreateUserDTO): Promise<User> {
-        const prismaRole = data.role as unknown as PrismaRole;
+        const prismaRole = data.roles as PrismaRole[];
         const newPrismaUser = await prisma.user.create({
             data: {
                 email: data.email,
                 password: data.password,
-                roles: [prismaRole],
+                roles: prismaRole,
             }
         });
         return UserMapper.toDomain(newPrismaUser)

@@ -1,52 +1,44 @@
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { AppError } from "../shared/errors/appError.js";
-import { prisma } from "../infraestructure/prisma/client.js";
-import jwt from 'jsonwebtoken'
-import { mapRolesToDomain } from "../modules/user/user.mapper.js";
+import { Role } from "../modules/user/user.entity.js";
 
-interface JwtPayload {
-    sub: string;
+const JWT_SECRET = process.env.JWT_SECRET ?? "default_secret";
+
+interface TokenPayload {
+  sub: string;
+  roles: Role[]; 
+  iat: number;
+  exp: number;
 }
 
-export async function authenticate(
-    req: Request,
-    res: Response,
-    next: NextFunction
+export function ensureAuthenticated(
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) {
-    const authHeader = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-    if(!authHeader) {
-        throw new AppError('Token not found', 401);
-    }
+  if (!authHeader) {
+    throw new AppError("Token missing", 401);
+  }
 
-    const [, token] = authHeader.split(' ');
-    if(!token) {
-        throw new AppError('Token with wrong format', 401);
-    }
+  const [, token] = authHeader.split(" ");
 
-    try {
-        const decoded = jwt.verify(
-            token,
-            process.env.JWT_SECRET!
-        ) as JwtPayload;
+  if (!token) {
+    throw new AppError("Token missing", 401);
+  }
 
-        const user = await prisma.user.findUnique({
-            where: { id: decoded.sub },
-            select: {
-                id: true,
-                roles: true,
-            },
-        });
-        if (!user) {
-            throw new AppError('User not found', 401);
-        }
-        req.user = {
-            id: user.id,
-            roles: mapRolesToDomain(user.roles),
-        };
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as unknown as TokenPayload;
 
-        return next();
-    } catch {
-        throw new AppError('Token expired or invalid', 401);
-    }
+    req.user = {
+      id: decoded.sub,
+      roles: decoded.roles 
+    };
+
+    return next();
+  } catch (err) {
+    throw new AppError("Invalid token", 401);
+  }
 }

@@ -32,6 +32,12 @@ export class UserService {
         return user;
     }
 
+    async getByEmail(email: string): Promise<User> {
+        const user = await this.repository.findByEmail(email);
+        if (!user) throw new AppError('User not found', 404);
+        return user;
+    }
+
     async update(id: string, dto: UpdateUserDTO): Promise<User> {
         const user = await this.repository.findById(id);
         if (!user) throw new AppError("User not found", 404);

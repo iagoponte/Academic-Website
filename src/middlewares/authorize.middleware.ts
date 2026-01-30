@@ -1,19 +1,23 @@
 import type { NextFunction, Request, Response } from "express";
-import type { Role } from "../modules/user/user.entity.js";
 import { AppError } from "../shared/errors/appError.js";
 
-export function authorize(...allowedRoles: Role[]) {
+export function ensureRoles(allowedRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
+    
     if (!req.user) {
       throw new AppError("User not authenticated", 401);
     }
 
-    const hasPermission = req.user.roles.some((role) =>
-      allowedRoles.includes(role),
+    if (!req.user.roles || req.user.roles.length === 0) {
+      throw new AppError("User does not have any roles", 403);
+    }
+
+    const hasPermission = req.user.roles.some((userRole) => 
+      allowedRoles.includes(userRole)
     );
 
     if (!hasPermission) {
-      throw new AppError("Acess denied", 403);
+      throw new AppError("Insufficient permissions", 403);
     }
 
     return next();

@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { GradeController } from './evalGrade.controller.js';
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
 
 const gradeRoutes = Router();
 const controller = new GradeController();
@@ -148,7 +150,7 @@ gradeRoutes.get('/evaluation/:evaluationId', controller.listByEvaluation);
  *               items:
  *                 $ref: '#/components/schemas/GradeResponse'
  */
-gradeRoutes.get('/', controller.listAll);
+gradeRoutes.get('/', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.listAll);
 /**
  * @openapi
  * /api/grades:
@@ -166,7 +168,7 @@ gradeRoutes.get('/', controller.listAll);
  *               items:
  *                 $ref: '#/components/schemas/GradeResponse'
  */
-gradeRoutes.get('/:id', controller.getById);
+gradeRoutes.get('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.getById);
 /**
  * @openapi
  * /api/grades/{id}:
@@ -191,6 +193,6 @@ gradeRoutes.get('/:id', controller.getById);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.delete('/:id', controller.delete);
+gradeRoutes.delete('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.delete);
 
 export { gradeRoutes };

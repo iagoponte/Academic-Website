@@ -54,7 +54,7 @@ export class GradeController {
 
  // ADMIN
 
-  listAll = async (_: Request, res: Response) => {
+  listAll = async (req: Request, res: Response) => {
     const grades = await this.gradeService.listAll();
     const gradesResponse = grades.map(grade => GradeMapper.toResponse(grade))
     return res.json(gradesResponse);

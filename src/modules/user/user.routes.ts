@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { UserController } from './user.controller.js';
+import { AuthController } from './auth/auth.controller.js';
 
 const userRoutes = Router();
 const controller = new UserController();
+const authController = new AuthController();
 
 /**
  * @openapi
@@ -64,6 +66,40 @@ const controller = new UserController();
  *
  */
 
+//rota de login
+/**
+ * @openapi
+ * /users/login:
+ *   post:
+ *     summary: Autentica um usuário e retorna um token JWT
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
+ *     responses:
+ *       200:
+ *         description: Login realizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Dados inválidos (Schema Validation)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: E-mail ou senha incorretos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+userRoutes.post('/login', authController.handle)
 
 /**
  * @openapi
@@ -162,5 +198,7 @@ userRoutes.patch('/:id', controller.update);
  *        description: Usuário não encontrado
  */
 userRoutes.delete('/:id', controller.delete);
+
+//falta criar rota de update roles.
 
 export { userRoutes };
