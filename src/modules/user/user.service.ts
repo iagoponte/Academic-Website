@@ -3,12 +3,13 @@ import { UserRepository } from "./user.repository.js";
 import { AppError } from "../../shared/errors/appError.js";
 import { UserMapper } from "./user.mapper.js";
 import type { CreateUserDTO, UpdateUserDTO, UserResponseDTO } from "./user.dtos.js";
+import type { User } from "./user.entity.js";
 
 export class UserService {
     constructor(private readonly repository: UserRepository) {}
 
     // Criar ADMINS ou COORDENADORES que não têm perfil específico
-    async create(dto: CreateUserDTO): Promise<UserResponseDTO> {
+    async create(dto: CreateUserDTO): Promise<User> {
         const exists = await this.repository.findByEmail(dto.email);
         if (exists) {
             throw new AppError("Email already in use", 409);
@@ -18,15 +19,15 @@ export class UserService {
             ...dto,
             password: hashedPassword
         });
-        return UserMapper.toResponse(user);
+        return user;
     }
 
-    async list(): Promise<UserResponseDTO[]> {
+    async list(): Promise<User[]> {
         const users = await this.repository.findAll();
-        return users.map(UserMapper.toResponse);
+        return users;
     }
 
-    async update(id: string, dto: UpdateUserDTO): Promise<UserResponseDTO> {
+    async update(id: string, dto: UpdateUserDTO): Promise<User> {
         const user = await this.repository.findById(id);
         if (!user) throw new AppError("User not found", 404);
         const dataToUpdate: UpdateUserDTO = {};
@@ -40,7 +41,7 @@ export class UserService {
         }
 
         const updatedUser = await this.repository.update(id, dataToUpdate);
-        return UserMapper.toResponse(updatedUser);
+        return updatedUser;
     }
 
     async delete(id: string): Promise<void> {

@@ -3,6 +3,7 @@ import { UserService } from './user.service.js';
 import { UserRepository } from './user.repository.js';
 import { createUserSchema, updateUserSchema } from './schema/user.schema.js';
 import { getStringParam } from '../../shared/http/params.js';
+import { UserMapper } from './user.mapper.js';
 
 
 export class UserController {
@@ -11,19 +12,22 @@ export class UserController {
     create = async (req: Request, res: Response) => {
         const validData = createUserSchema.parse(req.body);
         const user = await this.service.create(validData);
-        return res.status(201).json(user);
+        const userResponse = UserMapper.toResponse(user)
+        return res.status(201).json(userResponse);
     };
 
     list = async (req: Request, res: Response) => {
         const users = await this.service.list();
-        return res.json(users);
+        const userResponse = users.map(UserMapper.toResponse)
+        return res.json(userResponse);
     };
 
     update = async (req: Request, res: Response) => {
         const id = getStringParam(req, 'id');
         const validData = updateUserSchema.parse(req.body);
         const user = await this.service.update(id, validData);
-        return res.json(user);
+        const userResponse = UserMapper.toResponse(user)
+        return res.json(userResponse);
     };
 
     delete = async (req: Request, res: Response) => {

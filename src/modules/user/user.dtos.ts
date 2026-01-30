@@ -8,7 +8,7 @@ export type UpdateUserDTO = z.infer<typeof updateUserSchema>;
 export interface UserResponseDTO {
     id: string;
     email: string;
-    roles: Role[]; // Lembre-se que mudamos para array
+    roles: Role[]; 
     createdAt: Date;
     updatedAt: Date;
 }
