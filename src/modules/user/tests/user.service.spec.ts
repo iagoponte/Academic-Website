@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UserService } from '../user.service.js';
-import { Role } from '../../../infraestructure/generated/prisma/enums.js';
+import { Role  as PrismaRole } from '../../../infraestructure/generated/prisma/enums.js';
 import { AppError } from '../../../shared/errors/appError.js';
+import { Role as EntityRoles } from '../user.entity.js';
 
 describe('UserService', () => {
     let service: UserService;
@@ -12,7 +13,7 @@ describe('UserService', () => {
         id: 'uuid-user-123',
         email: 'admin@school.com',
         password: 'hashedpassword123',
-        roles: [Role.Administrator], // Exemplo de role
+        roles: [EntityRoles.Administrator, EntityRoles.Teacher], // Exemplo de role
         createdAt: new Date(),
         updatedAt: new Date(),
     };
@@ -44,14 +45,14 @@ describe('UserService', () => {
         const result = await service.create({
             email: 'admin@school.com',
             password: 'password123',
-            role: Role.Administrator
+            roles: [EntityRoles.Administrator, EntityRoles.Teacher]
         });
 
         // 3. Assert
         expect(repository.findByEmail).toHaveBeenCalledWith('admin@school.com');
         expect(repository.create).toHaveBeenCalledOnce();
         expect(result).toHaveProperty('id');
-        expect(result.roles).toContain('Administrator');
+        expect(result.roles).toEqual(['Administrator', 'Teacher']);
     });
 
     it('should throw error if email already exists', async () => {
@@ -61,7 +62,7 @@ describe('UserService', () => {
             service.create({
                 email: 'admin@school.com',
                 password: 'password123',
-                role: Role.Administrator
+                roles: [EntityRoles.Administrator, EntityRoles.Teacher]
             }),
         ).rejects.toBeInstanceOf(AppError);
     });
@@ -76,7 +77,7 @@ describe('UserService', () => {
 
         expect(repository.findAll).toHaveBeenCalledOnce();
         expect(result).toHaveLength(1);
-        expect(result[0].email).toBe(UserEntity.email);
+        expect(result.map(i => i.email)).toContain(UserEntity.email);
     });
 
     // =========================

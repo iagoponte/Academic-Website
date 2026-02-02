@@ -1,12 +1,13 @@
 import { z } from 'zod';
+import { Role } from '../user.entity.js';
 
-const RoleEnum = z.enum(['Student', 'Teacher', 'Administrator', 'Coordinator', 'Director'])
+// const RoleEnum = z.enum(['Student', 'Teacher', 'Administrator', 'Coordinator', 'Director'])
 
 export const createUserSchema = z.object({
   name: z.string().min(3).optional(), // Opcional pois User puro não tem name obrigatório no schema, mas é bom ter
   email: z.string().email(),
   password: z.string().min(6),
-  roles: z.array(RoleEnum).nonempty("Pelo menos uma role é obrigatória"), // Valida se é ADMIN, TEACHER, etc.
+  roles: z.array(z.enum(Role)).nonempty("Pelo menos uma role é obrigatória"), // Valida se é ADMIN, TEACHER, etc.
 });
 
 export const updateUserSchema = z.object({
