@@ -50,7 +50,7 @@ describe("EnrollmentService", () => {
 
     const createdEnrollment = {
       id: "enroll-uuid",
-      student: { id: "student-uuid", name: "João", registrationNumber: "registration-uuid"},
+      student: { id: "student-uuid", name: "João", registration: "registration-uuid"},
       class: { id: "class-uuid", name: "Biochemistry", semester: "2023.1" },
       createdAt: new Date(),
     };

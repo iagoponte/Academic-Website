@@ -48,7 +48,7 @@ describe('StudentService', () => {
 
     expect(repository.create).toHaveBeenCalledOnce();
     expect(result).toHaveProperty('id');
-    expect(result.status).toBe('ACTIVE');
+    expect(result.isActive).toBe(true);
   });
 
   it('should throw error if registration number already exists', async () => {
@@ -125,7 +125,7 @@ describe('StudentService', () => {
 
     const result = await service.inactivate('uuid');
 
-    expect(result.status).toBe('INACTIVE');
+    expect(result.isActive).toBe(false);
   });
 
   it('should throw error if student already inactive', async () => {
