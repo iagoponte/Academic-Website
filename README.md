@@ -26,40 +26,45 @@ O projeto segue uma arquitetura baseada em módulos:
 ```bash
 src/
 ├── config/
-├── infraestructure/
-|   ├── generated/
-|   └── prisma/
-├── middlewares/
-|   └── tests/
+│── infraestructure/
+│   ├── generated/
+│   └── prisma/
+│── middlewares/
+│   └── tests/
 ├── modules/
-| └── classTeacher/
-|   ├── schema/
-|   └── tests/
-│ └── discipline(class)/
-|   ├── schema/
-|   └── tests/
-│ └── enrollment/
-|   ├── schema/
-|   └── tests/
-│ └── evaluation/
-|   ├── schema/
-|   └── tests/
-│ └── evaluationGrade/
-|   ├── schema/
-|   └── tests/
-│ └── report-card/
-|   ├── schema/
-|   └── tests/
-│ └── student/
-|   ├── schema/
-|   └── tests/
-| └── teacher/
-|   ├── schema/
-|   └── tests/
+│   └── classTeacher/
+│       ├── schema/
+│       └── tests/
+│   └── discipline(class)/
+│       ├── schema/
+│       └── tests/
+│   └── enrollment/
+│       ├── schema/
+│       └── tests/
+│   └── evaluation/
+│       ├── schema/
+│       └── tests/
+│   └── evaluationGrade/
+│       ├── schema/
+│       └── tests/
+│   └── report-card/
+│       ├── schema/
+│       └── tests/
+│   └── student/
+│       ├── schema/
+│       └── tests/
+│   └── teacher/
+│       ├── schema/
+│       └── tests/
+│   └── user/
+│       ├── auth/
+│       ├── schema/
+│       └── tests/
 ├── shared/
-│ ├── errors/
-│ ├── http/
-│ └── utils/
+│   ├── @types/
+│   ├── errors/
+│   ├── http/
+│   └── utils/
 ├── routes/
 ├── app.ts
 └── server.ts
