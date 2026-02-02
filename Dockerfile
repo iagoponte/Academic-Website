@@ -1,53 +1,54 @@
 # ----------------------------------------------------------------------------
-# ESTÁGIO 1: BUILD (A Fábrica)
-# Aqui instalamos tudo, rodamos o Prisma e compilamos o TypeScript
+# ESTÁGIO 1: BUILD
 # ----------------------------------------------------------------------------
 FROM node:20-alpine AS builder
 
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# 1. Copia apenas os arquivos de dependência (para aproveitar o cache do Docker)
+# 1. Copia package.json
 COPY package*.json ./
-COPY prisma ./prisma/
 
-# 2. Instala TODAS as dependências (incluindo devDependencies como typescript)
+# 2. MUDANÇA AQUI: Copia a pasta prisma mantendo a estrutura original
+# O Docker vai criar as pastas src/infraestructure/prisma automaticamente
+COPY src/infraestructure/prisma ./src/infraestructure/prisma/
+
+# 3. Instala dependências
 RUN npm install
 
-# 3. Gera o Prisma Client (Crucial: sem isso o banco não funciona)
+# 4. Gera o Prisma Client
+# Se o seu package.json tiver a configuração do caminho do schema, ele vai achar.
+# Se não, o comando vai procurar no padrão. Se der erro aqui, me avise.
 RUN npx prisma generate
 
-# 4. Copia o resto do código fonte
+# 5. Copia o resto do código
 COPY . .
 
-# 5. Compila o TypeScript para JavaScript (pasta dist)
+# 6. Compila o TypeScript
 RUN npm run build
 
 # ----------------------------------------------------------------------------
-# ESTÁGIO 2: PRODUÇÃO (O Produto Final)
-# Aqui copiamos apenas o necessário da "Fábrica". Imagem leve e segura.
+# ESTÁGIO 2: PRODUÇÃO
 # ----------------------------------------------------------------------------
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Instala apenas dependências leves de produção
 COPY package*.json ./
 RUN npm install --only=production
 
-# Copia os artefatos construídos no estágio anterior (builder)
+# 7. Copia o código compilado (JS)
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
 
-# IMPORTANTE: Copia o Prisma Client gerado no estágio anterior
+# 8. MUDANÇA AQUI: Copia o schema prisma para a produção também (mantendo estrutura)
+# Isso é importante caso você rode migrations em produção
+COPY --from=builder /app/src/infraestructure/prisma ./src/infraestructure/prisma
+
+# 9. Copia o Prisma Client gerado (Isso é crucial)
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# Define usuário não-root por segurança (Best Practice)
 USER node
 
-# Expõe a porta que sua API usa
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
 CMD ["node", "dist/server.js"]
