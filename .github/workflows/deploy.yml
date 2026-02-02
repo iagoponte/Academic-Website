@@ -51,6 +51,7 @@ jobs:
           # Roda o novo container
           sudo docker run -d \
             --name professor-api \
+            --network professor-network \
             --restart unless-stopped \
             -p 3000:3000 \
             -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
