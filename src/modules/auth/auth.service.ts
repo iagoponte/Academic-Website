@@ -1,10 +1,9 @@
 import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { prisma } from "../../../infraestructure/prisma/client.js";
-import { AppError } from "../../../shared/errors/appError.js";
+import { AppError } from "../../shared/errors/appError.js";
 import type { LoginDTO } from "./auth.dto.js";
-import { UserService } from "../user.service.js";
-import { UserRepository } from "../user.repository.js";
+import { UserService } from "../user/user.service.js";
+import { UserRepository } from "../user/user.repository.js";
 
 export class AuthService {
   async execute({ email, password }: LoginDTO) {

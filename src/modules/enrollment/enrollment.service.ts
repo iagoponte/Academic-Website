@@ -1,5 +1,5 @@
 import { AppError } from "../../shared/errors/appError.js";
-import type { ClassRepository } from "../discipline(class)/class.repository.js";
+import type { ClassRepository } from "../discipline/class.repository.js";
 import type { StudentRepository } from "../student/student.repository.js";
 import type { CreateEnrollmentDTO, EnrollmentResponseDTO } from "./enrollment.dto.js";
 import type { Enrollment } from "./enrollment.entity.js";

@@ -4,11 +4,10 @@ import { EnrollmentRepository } from '../enrollment/enrollment.repository.js';
 import { GradeRepository } from '../evaluationGrade/evalGrade.repository.js';
 import { EvaluationRepository } from '../evaluation/evaluation.repository.js';
 import { getStringParam } from '../../shared/http/params.js';
-import { ReportCardPdfProvider } from './reportCard-pdf.provider.js';
+import { ReportCardPdfProvider } from './reportCardPDF.provider.js';
 import { ReportCardMapper } from './reportCard.mapper.js';
 
 export class ReportCardController {
-    // Injeção de Dependências
     private service = new ReportCardService(
         new EnrollmentRepository(), 
         new GradeRepository(), 
@@ -16,7 +15,6 @@ export class ReportCardController {
     );
     private pdfProvider = new ReportCardPdfProvider();
 
-    // Retorna JSON (usa Mapper)
     generate = async (req: Request, res: Response): Promise<Response> => {
         const id = getStringParam(req, 'id'); // enrollmentId
         
@@ -26,7 +24,6 @@ export class ReportCardController {
         return res.json(responseDTO);
     }
 
-    // Retorna PDF (Usa Provider)
     generatePdf = async (req: Request, res: Response): Promise<Response> => {
         const id = getStringParam(req, 'id');
         const reportEntity = await this.service.generate(id);

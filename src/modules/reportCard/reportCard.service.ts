@@ -48,7 +48,7 @@ export class ReportCardService {
       };
     });
 
-    // 5. Cálculos de Domínio (Média Final)
+    // Final Grade Avg
     const average = this.calculateAverage(evaluationResults);
     const status = this.calculateStatus(average);
 
@@ -68,7 +68,7 @@ export class ReportCardService {
     };
   }
 
-  // O cálculo da média continua o mesmo (Soma Ponderada / Soma dos Pesos)
+  // Avg calc
   private calculateAverage(evaluations: { grade: number | null; weight: number }[]): number {
     let weightedSum = 0;
     let weightSum = 0;

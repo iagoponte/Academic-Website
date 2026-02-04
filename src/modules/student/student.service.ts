@@ -47,7 +47,6 @@ export class StudentService {
 
   async update(id: string, dto: UpdateStudentDTO): Promise<Student> {
     await this.getById(id);
-    // Se precisar mudar email/senha, "UserService" ou "ProfileService".
     const updatedStudent = await this.repository.update(id, dto);
     return updatedStudent;
   }

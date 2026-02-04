@@ -31,10 +31,10 @@ export class GradeController {
   };
 
   /* =========================
-   * CONSULTAS DE DOMÍNIO
+   * DOMAIN CONSULTS
    * ========================= */
 
-  // Boletim do aluno
+  // Student ReportCard
   listByEnrollment = async (req: Request, res: Response) => {
     const enrollmentId = getStringParam(req, 'enrollmentId');
     const grades =
@@ -43,7 +43,7 @@ export class GradeController {
     return res.json(gradesResponse);
   };
 
-  // Diário de notas
+  // Grade Journal
   listByEvaluation = async (req: Request, res: Response) => {
     const evaluationId = getStringParam(req, 'evaluationId');
     const grades =

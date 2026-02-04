@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { AppError } from "../../../shared/errors/appError.js";
 import { EnrollmentService } from "../enrollment.service.js";
-import { create } from "node:domain";
 
 describe("EnrollmentService", () => {
   let service: any;

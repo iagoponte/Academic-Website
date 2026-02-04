@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserController } from './user.controller.js';
-import { AuthController } from './auth/auth.controller.js';
+import { AuthController } from '../auth/auth.controller.js';
 
 const userRoutes = Router();
 const controller = new UserController();
@@ -66,7 +66,7 @@ const authController = new AuthController();
  *
  */
 
-//rota de login
+//Login route
 /**
  * @openapi
  * /users/login:
@@ -199,6 +199,6 @@ userRoutes.patch('/:id', controller.update);
  */
 userRoutes.delete('/:id', controller.delete);
 
-//falta criar rota de update roles.
+//Missing an update roles route
 
 export { userRoutes };

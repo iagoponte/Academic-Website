@@ -63,7 +63,6 @@ export class StudentRepository {
   }
 
   async create(data: CreateStudentDTO): Promise<Student> {
-    // A query agora cria um USER, que conecta um STUDENT.
     const createdUser = await prisma.user.create({
       data: {
         email: data.email,
@@ -83,7 +82,6 @@ export class StudentRepository {
       },
     });
 
-    // O Prisma retorna o User com o Student dentro. Precisamos retornar o Student.
     if (!createdUser.student)
       throw new Error("Erro fatal na criação do estudante");
 
@@ -107,7 +105,7 @@ export class StudentRepository {
     const prismaStudent = await prisma.student.update({
       where: { id },
       data: {
-        registrationNumber: newRegistrationNumber, // Passa direto
+        registrationNumber: newRegistrationNumber,
       },
       include: {
         user: { select: { email: true } },

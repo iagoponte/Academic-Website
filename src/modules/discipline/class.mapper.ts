@@ -19,11 +19,10 @@ export class ClassMapper {
             semester: raw.semester,
             createdAt: raw.createdAt,
 
-            // Achatamento: Remove a camada 'ClassTeacher' e pega o email do User
             teachers: raw.teachers?.map(item => ({
                 id: item.teacher.id,
                 name: item.teacher.name,
-                email: item.teacher.user?.email ?? "" // Navegação segura
+                email: item.teacher.user?.email ?? ""
             })) ?? []
         };
     }

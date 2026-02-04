@@ -3,7 +3,6 @@ import type { AssignTeacherDTO } from "./classTeacher.dto.js";
 
 export class ClassTeacherRepository {
   
-  // Vincular
   async assign(data: AssignTeacherDTO): Promise<void> {
     await prisma.classTeacher.create({
       data: {
@@ -13,7 +12,6 @@ export class ClassTeacherRepository {
     });
   }
 
-  // Desvincular
   async unassign(data: AssignTeacherDTO): Promise<void> {
     await prisma.classTeacher.delete({
       where: {
@@ -25,7 +23,6 @@ export class ClassTeacherRepository {
     });
   }
 
-  // Verificar se o VÍNCULO existe
   async exists(classId: string, teacherId: string): Promise<boolean> {
     const relation = await prisma.classTeacher.findUnique({
       where: {

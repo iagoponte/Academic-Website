@@ -5,7 +5,7 @@ import { get } from 'node:http';
 import { getStringParam } from '../../shared/http/params.js';
 import { EnrollmentRepository } from './enrollment.repository.js';
 import { StudentRepository } from '../student/student.repository.js';
-import { ClassRepository } from '../discipline(class)/class.repository.js';
+import { ClassRepository } from '../discipline/class.repository.js';
 import { EnrollmentMapper } from './enrollment.mapper.js';
 
 export class EnrollmentController {

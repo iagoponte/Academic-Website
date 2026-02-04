@@ -1,4 +1,3 @@
-// import type { Role } from "../../infraestructure/generated/prisma/enums.js";
 
 export enum Role{
     Student = 'Student',

@@ -13,7 +13,7 @@ export interface EvaluationGrade {
         name: string;
         registrationNumber: string;
     } | undefined;
-    classInfo?: { // "class" é palavra reservada, usamos classInfo
+    classInfo?: { 
         id: string;
         name: string;
         semester: string;

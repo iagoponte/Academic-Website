@@ -7,8 +7,5 @@ export interface Student {
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
-    
-    // user?: {
-    //     email: string;
-    // };
+
 }

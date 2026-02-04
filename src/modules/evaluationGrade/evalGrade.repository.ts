@@ -7,16 +7,16 @@ import { GradeMapper } from './evalGrade.mapper.js';
 const gradeInclude = {
     enrollment: {
         include: {
-            student: true, // Traz dados do aluno
-            class: true    // Traz dados da turma
+            student: true,
+            class: true
         }
     },
-    evaluation: true       // Traz dados da avaliação
+    evaluation: true  
 };
 
 export class GradeRepository {
   /* ==========================================
-   * CREATE – Lançar nota
+   * CREATE – Posting Grade
    * ========================================== */
   async create(data: CreateGradeDTO): Promise<EvaluationGrade> {
     const prismaGrade = await prisma.evaluationGrade.create({
@@ -31,7 +31,7 @@ export class GradeRepository {
   }
 
   /* ==========================================
-   * UPDATE – Ajustar nota
+   * UPDATE – Grade Adjustment
    * ========================================== */
   async update(id: string, data: UpdateGradeDTO): Promise<EvaluationGrade> {
     const prismaGrade = await prisma.evaluationGrade.update({
@@ -45,7 +45,7 @@ export class GradeRepository {
   }
 
   /* ==========================================
-   * EXISTS – Evitar duplicidade
+   * EXISTS – Avoid duplicity
    * ========================================== */
   async exists(
     enrollmentId: string,
@@ -65,7 +65,7 @@ export class GradeRepository {
    * CONSULTAS DE DOMÍNIO
    * ========================================== */
 
-  // Boletim do aluno (por matrícula)
+  // Report Card bound by enrollment
   async findByEnrollment(
     enrollmentId: string
   ): Promise<EvaluationGrade[]> {
@@ -79,7 +79,7 @@ export class GradeRepository {
     return prismaGrades.map(grade => GradeMapper.toDomain(grade))
   }
 
-  // Notas de uma avaliação (diário)
+  // Grades from one Evaluation
   async findByEvaluation(
     evaluationId: string
   ): Promise<EvaluationGrade[]> {

@@ -4,7 +4,7 @@ import { EnrollmentController } from './enrollment.controller.js';
 const enrollmentRoutes = Router();
 const controller = new EnrollmentController();
 
-//ROTAS DE DOMÍNIO
+//DOMAIN ROUTES
 /**
  * @openapi
  * /api/enrollments:
@@ -96,7 +96,7 @@ enrollmentRoutes.get('/students/:studentId/classes', controller.listByStudent);
  */
 enrollmentRoutes.get('/classes/:classId/students', controller.listByClass);
 
-//ROTAS DE ADMIN
+//ADMIN ROUTES
 /**
  * @openapi
  * /api/enrollments/admin:

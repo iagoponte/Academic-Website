@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { getStringParam } from "../../shared/http/params.js";
-import { ClassRepository } from "../discipline(class)/class.repository.js";
+import { ClassRepository } from "../discipline/class.repository.js";
 import { EvaluationRepository } from "./evaluation.repository.js";
 import { EvaluationService } from "./evaluation.service.js";
 import { EvaluationMapper } from "./evaluation.mapper.js";

@@ -10,8 +10,8 @@ export interface ReportCard {
   evaluations: {
     type: string;
     weight: number;
-    grade: number | null;         // Grade given
-    weightedGrade: number | null; // Grade considering the weight (ex: 8.0 if weight 0.8)
+    grade: number | null;
+    weightedGrade: number | null;
   }[];
   average: number;
   status: 'Aprovado' | 'Reprovado' | 'Recuperação';

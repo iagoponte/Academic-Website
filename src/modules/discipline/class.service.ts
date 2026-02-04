@@ -7,7 +7,6 @@ export class ClassService {
     constructor(private readonly repository: ClassRepository) {}
 
     async create(data: CreateClassDTO): Promise<ClassEntity> {
-        // Retorna a entidade pura
         return this.repository.create(data);
     }
 

@@ -42,7 +42,7 @@ export class ClassRepository {
             },
             select: classSelect,
         });
-        return ClassMapper.toDomain(prismaClass as any); // Cast seguro devido à complexidade do select
+        return ClassMapper.toDomain(prismaClass as any); 
     }
 
     async findAll(): Promise<ClassEntity[]> {
@@ -50,8 +50,6 @@ export class ClassRepository {
             select: classSelect,
             orderBy: { createdAt: 'desc' },
         });
-        // OBS: Usamos 'as any' aqui momentaneamente pois o tipo inferido do Select 
-        // profundo do Prisma às vezes confunde o TS, mas a estrutura bate com o Mapper.
         return prismaClasses.map(c => ClassMapper.toDomain(c as any));
     }
 

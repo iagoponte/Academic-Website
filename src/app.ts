@@ -3,11 +3,11 @@ import { globalErrorHandler } from './middlewares/errorMiddleware.js';
 import { studentRoutes } from './modules/student/student.routes.js';
 import { teacherRoutes } from './modules/teacher/teacher.routes.js';
 import { classTeacherRoutes } from './modules/classTeacher/classTeacher.routes.js';
-import { classRoutes } from './modules/discipline(class)/class.routes.js';
+import { classRoutes } from './modules/discipline/class.routes.js';
 import { enrollmentRoutes } from './modules/enrollment/enrollment.routes.js';
 import { gradeRoutes } from './modules/evaluationGrade/evalGrade.routes.js';
 import { evaluationRoutes } from './modules/evaluation/evaluation.routes.js';
-import { reportCardRoutes } from './modules/report-card/reportCard.routes.js';
+import { reportCardRoutes } from './modules/reportCard/reportCard.routes.js'; 
 import { setupSwagger } from './config/swagger.js';
 import { userRoutes } from './modules/user/user.routes.js';
 

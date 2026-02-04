@@ -7,7 +7,7 @@ import type { User } from "./user.entity.js";
 export class UserService {
     constructor(private readonly repository: UserRepository) {}
 
-    // Criar ADMINS ou COORDENADORES que não têm perfil específico
+    // Create ADMINS and COORD without a specific profile.
     async create(dto: CreateUserDTO): Promise<User> {
         const exists = await this.repository.findByEmail(dto.email);
         if (exists) {

@@ -1,8 +1,8 @@
 import { AppError } from '../../shared/errors/appError.js';
 import type { AssignTeacherDTO } from './classTeacher.dto.js';
 import type { ClassTeacherRepository } from './classTeacher.repository.js';
-import type { ClassRepository } from '../discipline(class)/class.repository.js'; // Importe
-import type { TeacherRepository } from '../teacher/teacher.repository.js'; // Importe
+import type { ClassRepository } from '../discipline/class.repository.js'; 
+import type { TeacherRepository } from '../teacher/teacher.repository.js'; 
 
 export class ClassTeacherService {
     constructor(

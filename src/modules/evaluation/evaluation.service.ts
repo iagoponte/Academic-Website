@@ -1,5 +1,5 @@
 import { AppError } from "../../shared/errors/appError.js";
-import type { ClassRepository } from "../discipline(class)/class.repository.js";
+import type { ClassRepository } from "../discipline/class.repository.js";
 import type { CreateEvaluationDTO, EvaluationResponseDTO, UpdateEvaluationDTO } from "./evaluation.dto.js";
 import type { Evaluation } from "./evaluation.entity.js";
 import { EvaluationMapper } from "./evaluation.mapper.js";

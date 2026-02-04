@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { assignTeacherSchema } from './classTeacher.dto.js';
 import { ClassTeacherRepository } from './classTeacher.repository.js';
 import { ClassTeacherService } from './classTeacher.service.js';
-import { ClassRepository } from '../discipline(class)/class.repository.js';
+import { ClassRepository } from '../discipline/class.repository.js';
 import { TeacherRepository } from '../teacher/teacher.repository.js';
 
 export class ClassTeacherController {

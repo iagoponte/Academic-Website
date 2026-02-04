@@ -104,30 +104,93 @@ Nela é possível:
 
 ---
 
-## 📚 Principais Módulos
+## 📚 Principais Módulos do Sistema
 
 ### 👨‍🏫 Teachers
-- Cadastro de professores
-- Associação com turmas
+Responsável pela gestão dos professores da instituição.
+- Cadastro e atualização de professores
+- Associação de professores às turmas (classes)
+
+---
 
 ### 👨‍🎓 Students
+Gerenciamento dos alunos.
 - Cadastro de alunos
-- Matrículas em turmas
-- Histórico acadêmico
+- Matrícula em turmas
+- Consulta de histórico acadêmico
+
+---
 
 ### 🏫 Classes
-- Criação de turmas
+Representa as turmas/disciplina ofertadas.
+- Criação e gerenciamento de turmas
 - Associação com professores
-- Definição de semestre
+- Definição de semestre/período letivo
+
+---
 
 ### 📝 Evaluations
-- Registro de avaliações
-- Pesos e notas
+Define os **tipos de avaliações** aplicadas em uma turma.
+- Criação de avaliações (prova, trabalho, seminário, etc.)
+- Definição de peso da avaliação
+- Vínculo da avaliação a uma turma (classe)
+> ⚠️ Este módulo **não armazena notas**, apenas a estrutura da avaliação.
+
+---
+
+### 📊 Enrollment
+Responsável pelo vínculo entre alunos e turmas.
+- Matrícula de alunos em disciplinas
+- Centralização das relações aluno ↔ turma
+- Base para organização das notas e do boletim
+
+---
+
+### 🧮 EvaluationGrade
+Gerenciamento das **notas dos alunos**.
+- Registro de notas por avaliação
+- Associação direta com o *Enrollment*
+- Permite múltiplas notas por aluno conforme as avaliações definidas
+> 🔗 Atua como ponte entre **Enrollment** e **Evaluations**, armazenando o desempenho do aluno.
+
+---
 
 ### 📊 Report Cards
-- Geração de boletim
-- Cálculo de média
-- Status final (Aprovado, Reprovado, Recuperação)
+Geração e consolidação do boletim escolar.
+- Cálculo de médias com base nos pesos das avaliações
+- Geração de boletins por aluno
+- Definição do status final:
+  - Aprovado
+  - Reprovado
+  - Recuperação
+
+---
+
+### 👤 User
+Responsável pelos usuários do sistema.
+- Cadastro de usuários
+- Gerenciamento de login, email e senha
+- Vínculo do usuário com o sistema (acesso ao painel, rotas, etc.)
+
+---
+
+### 🔐 Auth
+Módulo de autenticação e autorização.
+- Autenticação via login e senha
+- Geração e validação de token JWT
+- Proteção de rotas
+- Controle de acesso baseado em usuário autenticado
+
+---
+
+## 🧠 Visão Geral da Arquitetura
+O sistema segue uma arquitetura modular, onde:
+- **Evaluations** definem *o que* será avaliado
+- **Enrollment** define *quem* está vinculado à turma
+- **EvaluationGrade** registra *como o aluno se saiu*
+- **Report Cards** consolidam os dados acadêmicos
+- **Auth** e **User** garantem segurança e controle de acesso
+
 
 ---
 
@@ -136,7 +199,11 @@ Nela é possível:
 As rotas podem ser testadas de duas formas:
 - **Swagger UI** (recomendado para entendimento da API)
 - **Postman** (coleções manuais ou importadas)
-
+---
+### Execução dos Testes
+```bash
+npm run test
+```
 ---
 
 ## ⚙️ Configuração do Ambiente
