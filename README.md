@@ -32,32 +32,32 @@ src/
 │── middlewares/
 │   └── tests/
 ├── modules/
-│   └── classTeacher/
+│   ├── auth/
+│   ├── classTeacher/
 │       ├── schema/
 │       └── tests/
-│   └── discipline(class)/
+│   ├── discipline/
 │       ├── schema/
 │       └── tests/
-│   └── enrollment/
+│   ├── enrollment/
 │       ├── schema/
 │       └── tests/
-│   └── evaluation/
+│   ├── evaluation/
 │       ├── schema/
 │       └── tests/
-│   └── evaluationGrade/
+│   ├── evaluationGrade/
 │       ├── schema/
 │       └── tests/
-│   └── report-card/
+│   ├── reportCard/
 │       ├── schema/
 │       └── tests/
-│   └── student/
+│   ├── student/
 │       ├── schema/
 │       └── tests/
-│   └── teacher/
+│   ├── teacher/
 │       ├── schema/
 │       └── tests/
-│   └── user/
-│       ├── auth/
+│   ├── user/
 │       ├── schema/
 │       └── tests/
 ├── shared/
