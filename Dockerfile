@@ -1,23 +1,18 @@
-#1. Build
+# Builder
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-
-COPY src/infraestructure/prisma ./src/infraestructure/prisma/
-
 RUN npm install
 
-RUN npx prisma generate
-
-# 5. copy the rest of the code
 COPY . .
 
-# 6. Compile to TS
+RUN npx prisma generate --schema=src/infraestructure/prisma/schema.prisma
+
 RUN npm run build
 
-# 2. Production
+# Production
 FROM node:20-alpine
 
 WORKDIR /app
