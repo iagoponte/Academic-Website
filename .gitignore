@@ -4,3 +4,5 @@ dist/
 build/
 coverage/
 .prisma/
+src/infraestructure/prisma/generated
+/src/**/generated
