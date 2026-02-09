@@ -19,7 +19,7 @@ COPY package*.json ./
 RUN npm install --only=production
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builde /app/src ./src
+COPY --from=builder /app/src ./src
 
 # COPY --from=builder /app/src/infraestructure/prisma ./src/infraestructure/prisma
 
