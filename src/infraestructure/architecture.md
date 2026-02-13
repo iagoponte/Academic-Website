@@ -27,68 +27,83 @@ O sistema contempla:
 ## 3. Diagrama Entidade-Relacionamento (ERD)
 
 ```mermaid
-erDiagram
+classDiagram
+    direction LR
 
-    USER {
-        string id
-        string email
-        string password
+    class User {
+        +String id
+        +String email
+        +String password
+        +Role[] roles
+        +DateTime createdAt
+        +DateTime updatedAt
     }
 
-    STUDENT {
-        string id
-        string userId
-        string registrationNumber
+    class Student {
+        +String id
+        +String name
+        +String registrationNumber
+        +Boolean isActive
+        +String userId
     }
 
-    TEACHER {
-        string id
-        string userId
+    class Teacher {
+        +String id
+        +String name
+        +String userId
     }
 
-    CLASS {
-        string id
-        string name
-        string semester
+    class Class {
+        +String id
+        +String name
+        +String semester
+        +DateTime createdAt
     }
 
-    ENROLLMENT {
-        string id
-        string studentId
-        string classId
+    class Enrollment {
+        +String id
+        +String studentId
+        +String classId
+        +DateTime createdAt
     }
 
-    EVALUATION {
-        string id
-        string classId
-        float weight
+    class ClassTeacher {
+        +String id
+        +String teacherId
+        +String classId
     }
 
-    EVALUATIONGRADE {
-        string id
-        string enrollmentId
-        string evaluationId
-        float value
+    class Evaluation {
+        +String id
+        +EvaluationType type
+        +Float weight
+        +String description
+        +String classId
+        +DateTime createdAt
+        +DateTime updatedAt
     }
 
-    CLASSTEACHER {
-        string id
-        string teacherId
-        string classId
+    class EvaluationGrade {
+        +String id
+        +String enrollmentId
+        +String evaluationId
+        +Float value
+        +DateTime createdAt
+        +DateTime updatedAt
     }
 
-    USER ||--o| STUDENT : has
-    USER ||--o| TEACHER : has
+    User "1" --> "0..1" Student : profile
+    User "1" --> "0..1" Teacher : profile
 
-    STUDENT ||--o{ ENROLLMENT : enrolls
-    CLASS ||--o{ ENROLLMENT : contains
+    Student "1" --> "0..n" Enrollment : enrollments
+    Class "1" --> "0..n" Enrollment : contains
 
-    TEACHER ||--o{ CLASSTEACHER : teaches
-    CLASS ||--o{ CLASSTEACHER : has
+    Teacher "1" --> "0..n" ClassTeacher : teaches
+    Class "1" --> "0..n" ClassTeacher : has
 
-    CLASS ||--o{ EVALUATION : has
-    ENROLLMENT ||--o{ EVALUATIONGRADE : receives
-    EVALUATION ||--o{ EVALUATIONGRADE : generates
+    Class "1" --> "0..n" Evaluation : evaluations
+    Enrollment "1" --> "0..n" EvaluationGrade : grades
+    Evaluation "1" --> "0..n" EvaluationGrade : generates
 ```
 
 ---
