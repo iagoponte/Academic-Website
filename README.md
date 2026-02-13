@@ -104,7 +104,7 @@ Nela é possível:
 
 ---
 
-## 📚 Principais Módulos do Sistema
+<!-- ## 📚 Principais Módulos do Sistema -->
 
 ### 👨‍🏫 Teachers
 Responsável pela gestão dos professores da instituição.
@@ -180,17 +180,6 @@ Módulo de autenticação e autorização.
 - Geração e validação de token JWT
 - Proteção de rotas
 - Controle de acesso baseado em usuário autenticado
-
----
-
-## 🧠 Visão Geral da Arquitetura
-O sistema segue uma arquitetura modular, onde:
-- **Evaluations** definem *o que* será avaliado
-- **Enrollment** define *quem* está vinculado à turma
-- **EvaluationGrade** registra *como o aluno se saiu*
-- **Report Cards** consolidam os dados acadêmicos
-- **Auth** e **User** garantem segurança e controle de acesso
-
 
 ---
 

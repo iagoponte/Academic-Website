@@ -29,18 +29,18 @@ O sistema contempla:
 ```mermaid
 erDiagram
 
-    USER ||--o| STUDENT : "1:1"
-    USER ||--o| TEACHER : "1:1"
+    USER ||--o| STUDENT : possui
+    USER ||--o| TEACHER : possui
 
-    STUDENT ||--o{ ENROLLMENT : "matricula"
-    CLASS ||--o{ ENROLLMENT : "possui"
+    STUDENT ||--o{ ENROLLMENT : matricula
+    CLASS ||--o{ ENROLLMENT : contem
 
-    TEACHER ||--o{ CLASSTEACHER : "leciona"
-    CLASS ||--o{ CLASSTEACHER : "tem"
+    TEACHER ||--o{ CLASSTEACHER : leciona
+    CLASS ||--o{ CLASSTEACHER : possui
 
-    CLASS ||--o{ EVALUATION : "possui"
-    ENROLLMENT ||--o{ EVALUATIONGRADE : "recebe"
-    EVALUATION ||--o{ EVALUATIONGRADE : "gera"
+    CLASS ||--o{ EVALUATION : contem
+    ENROLLMENT ||--o{ EVALUATIONGRADE : recebe
+    EVALUATION ||--o{ EVALUATIONGRADE : gera
 
     USER {
         string id PK
