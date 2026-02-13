@@ -4,7 +4,6 @@
 API RESTful desenvolvida para gerenciamento acadêmico, permitindo o controle de **professores, alunos, turmas, matrículas, avaliações e boletins**.  
 O projeto segue princípios modernos de arquitetura, separação de responsabilidades e documentação padronizada via **Swagger / OpenAPI**.
 
-
 ---
 
 ## 📌 Visão Geral
@@ -23,6 +22,60 @@ Esta aplicação foi construída com foco em **boas práticas de mercado**, incl
 
 [Arquitetura do Projeto](https://github.com/iagoponte/Academic-Website/blob/main/src/infraestructure/architecture.md)
 
+---
+
+## 📂 Estrutura
+
+O projeto segue uma arquitetura baseada em módulos:
+
+```bash
+src/
+├── config/
+│── infraestructure/
+│   ├── generated/
+│   └── prisma/
+│── middlewares/
+│   └── tests/
+├── modules/
+│   ├── auth/
+│   ├── classTeacher/
+│       ├── schema/
+│       └── tests/
+│   ├── discipline/
+│       ├── schema/
+│       └── tests/
+│   ├── enrollment/
+│       ├── schema/
+│       └── tests/
+│   ├── evaluation/
+│       ├── schema/
+│       └── tests/
+│   ├── evaluationGrade/
+│       ├── schema/
+│       └── tests/
+│   ├── reportCard/
+│       ├── schema/
+│       └── tests/
+│   ├── student/
+│       ├── schema/
+│       └── tests/
+│   ├── teacher/
+│       ├── schema/
+│       └── tests/
+│   ├── user/
+│       ├── schema/
+│       └── tests/
+├── shared/
+│   ├── @types/
+│   ├── errors/
+│   ├── http/
+│   └── utils/
+├── routes/
+├── app.ts
+└── server.ts
+```
+
+---
 
 ### Padrões adotados
 - **Controller**: recebe a requisição HTTP
@@ -54,8 +107,6 @@ Nela é possível:
 - Visualizar todas as rotas
 - Ver schemas de request/response
 - Executar chamadas diretamente pelo navegador
-
----
 
 <!-- ## 📚 Principais Módulos do Sistema -->
 
