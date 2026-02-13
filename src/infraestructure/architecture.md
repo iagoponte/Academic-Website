@@ -13,9 +13,60 @@ O sistema contempla:
 - Avaliações
 - Lançamento de notas
 
+## 2. Estrutura
+
+O projeto segue uma arquitetura baseada em módulos:
+
+```bash
+src/
+├── config/
+│── infraestructure/
+│   ├── generated/
+│   └── prisma/
+│── middlewares/
+│   └── tests/
+├── modules/
+│   ├── auth/
+│   ├── classTeacher/
+│       ├── schema/
+│       └── tests/
+│   ├── discipline/
+│       ├── schema/
+│       └── tests/
+│   ├── enrollment/
+│       ├── schema/
+│       └── tests/
+│   ├── evaluation/
+│       ├── schema/
+│       └── tests/
+│   ├── evaluationGrade/
+│       ├── schema/
+│       └── tests/
+│   ├── reportCard/
+│       ├── schema/
+│       └── tests/
+│   ├── student/
+│       ├── schema/
+│       └── tests/
+│   ├── teacher/
+│       ├── schema/
+│       └── tests/
+│   ├── user/
+│       ├── schema/
+│       └── tests/
+├── shared/
+│   ├── @types/
+│   ├── errors/
+│   ├── http/
+│   └── utils/
+├── routes/
+├── app.ts
+└── server.ts
+```
+
 ---
 
-## 2. Stack Tecnológica
+## 3. Stack Tecnológica
 
 - **Banco de Dados:** PostgreSQL
 - **ORM:** Prisma
@@ -24,7 +75,7 @@ O sistema contempla:
 
 ---
 
-## 3. Diagrama Entidade-Relacionamento (ERD)
+## 4. Diagrama Entidade-Relacionamento (ERD)
 
 ```mermaid
 classDiagram
@@ -108,11 +159,11 @@ classDiagram
 
 ---
 
-## 4. Modelo Lógico
+## 5. Modelo Lógico
 
 ---
 
-### 4.1 User
+### 5.1 User
 
 Tabela responsável pela autenticação e autorização do sistema.
 
@@ -131,7 +182,7 @@ Relacionamentos:
 
 ---
 
-### 4.2 Student
+### 5.2 Student
 
 Representa o perfil acadêmico do aluno.
 
@@ -148,7 +199,7 @@ Relacionamentos:
 
 ---
 
-### 4.3 Teacher
+### 5.3 Teacher
 
 Perfil acadêmico do professor.
 
@@ -157,7 +208,7 @@ Relacionamentos:
 
 ---
 
-### 4.4 Class
+### 5.4 Class
 
 Representa uma turma em determinado semestre.
 
@@ -168,7 +219,7 @@ Relacionamentos:
 
 ---
 
-### 4.5 Enrollment
+### 5.5 Enrollment
 
 Tabela de matrícula (N:N entre Student e Class).
 
@@ -181,7 +232,7 @@ Garante que um aluno não pode se matricular duas vezes na mesma turma.
 
 ---
 
-### 4.6 ClassTeacher
+### 5.6 ClassTeacher
 
 Tabela associativa (N:N entre Teacher e Class).
 
@@ -192,7 +243,7 @@ Constraint:
 
 ---
 
-### 4.7 Evaluation
+### 5.7 Evaluation
 
 Avaliações pertencentes a uma turma.
 
@@ -208,7 +259,7 @@ Observação:
 
 ---
 
-### 4.8 EvaluationGrade
+### 5.8 EvaluationGrade
 
 Notas de alunos em avaliações.
 
@@ -228,7 +279,7 @@ Otimiza consultas por matrícula.
 
 ---
 
-## 5. Enums
+## 6. Enums
 
 ### Role
 
@@ -248,7 +299,7 @@ Otimiza consultas por matrícula.
 
 ---
 
-## 6. Regras de Negócio Implementadas no Banco
+## 7. Regras de Negócio Implementadas no Banco
 
 ✔ Um usuário pode ter múltiplos papéis  
 ✔ Um aluno não pode se matricular duas vezes na mesma turma  
@@ -258,7 +309,7 @@ Otimiza consultas por matrícula.
 
 ---
 
-## 7. Decisões Arquiteturais
+## 8. Decisões Arquiteturais
 
 - Uso de UUID para evitar colisão e facilitar ambientes distribuídos
 - Uso de tabelas associativas explícitas para controle N:N
@@ -267,7 +318,7 @@ Otimiza consultas por matrícula.
 
 ---
 
-## 8. Possíveis Evoluções Futuras
+## 9. Possíveis Evoluções Futuras
 
 - Controle de presença (Attendance)
 - Histórico escolar consolidado

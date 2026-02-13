@@ -21,54 +21,7 @@ Esta aplicação foi construída com foco em **boas práticas de mercado**, incl
 
 ## 🧱 Arquitetura do Projeto
 
-O projeto segue uma arquitetura baseada em módulos:
-
-```bash
-src/
-├── config/
-│── infraestructure/
-│   ├── generated/
-│   └── prisma/
-│── middlewares/
-│   └── tests/
-├── modules/
-│   ├── auth/
-│   ├── classTeacher/
-│       ├── schema/
-│       └── tests/
-│   ├── discipline/
-│       ├── schema/
-│       └── tests/
-│   ├── enrollment/
-│       ├── schema/
-│       └── tests/
-│   ├── evaluation/
-│       ├── schema/
-│       └── tests/
-│   ├── evaluationGrade/
-│       ├── schema/
-│       └── tests/
-│   ├── reportCard/
-│       ├── schema/
-│       └── tests/
-│   ├── student/
-│       ├── schema/
-│       └── tests/
-│   ├── teacher/
-│       ├── schema/
-│       └── tests/
-│   ├── user/
-│       ├── schema/
-│       └── tests/
-├── shared/
-│   ├── @types/
-│   ├── errors/
-│   ├── http/
-│   └── utils/
-├── routes/
-├── app.ts
-└── server.ts
-```
+[Arquitetura do Projeto](https://github.com/iagoponte/Academic-Website/blob/main/src/infraestructure/architecture.md)
 
 
 ### Padrões adotados
@@ -106,7 +59,7 @@ Nela é possível:
 
 <!-- ## 📚 Principais Módulos do Sistema -->
 
-### 👨‍🏫 Teachers
+<!-- ### 👨‍🏫 Teachers
 Responsável pela gestão dos professores da instituição.
 - Cadastro e atualização de professores
 - Associação de professores às turmas (classes)
@@ -174,12 +127,12 @@ Responsável pelos usuários do sistema.
 
 ---
 
-### 🔐 Auth
-Módulo de autenticação e autorização.
+### 🔐 Auth -->
+<!-- Módulo de autenticação e autorização.
 - Autenticação via login e senha
 - Geração e validação de token JWT
 - Proteção de rotas
-- Controle de acesso baseado em usuário autenticado
+- Controle de acesso baseado em usuário autenticado -->
 
 ---
 
