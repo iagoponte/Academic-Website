@@ -29,67 +29,66 @@ O sistema contempla:
 ```mermaid
 erDiagram
 
-    USER ||--o| STUDENT : possui
-    USER ||--o| TEACHER : possui
-
-    STUDENT ||--o{ ENROLLMENT : matricula
-    CLASS ||--o{ ENROLLMENT : contem
-
-    TEACHER ||--o{ CLASSTEACHER : leciona
-    CLASS ||--o{ CLASSTEACHER : possui
-
-    CLASS ||--o{ EVALUATION : contem
-    ENROLLMENT ||--o{ EVALUATIONGRADE : recebe
-    EVALUATION ||--o{ EVALUATIONGRADE : gera
-
     USER {
-        string id PK
-        string email UNIQUE
+        string id
+        string email
         string password
-        Role[] roles
-        datetime createdAt
-        datetime updatedAt
     }
 
     STUDENT {
-        string id PK
-        string name
-        string registrationNumber UNIQUE
-        boolean isActive
-        string userId FK
+        string id
+        string userId
+        string registrationNumber
     }
 
     TEACHER {
-        string id PK
-        string name
-        string userId FK
+        string id
+        string userId
     }
 
     CLASS {
-        string id PK
+        string id
         string name
         string semester
     }
 
     ENROLLMENT {
-        string id PK
-        string studentId FK
-        string classId FK
+        string id
+        string studentId
+        string classId
     }
 
     EVALUATION {
-        string id PK
-        EvaluationType type
+        string id
+        string classId
         float weight
-        string classId FK
     }
 
     EVALUATIONGRADE {
-        string id PK
-        string enrollmentId FK
-        string evaluationId FK
+        string id
+        string enrollmentId
+        string evaluationId
         float value
     }
+
+    CLASSTEACHER {
+        string id
+        string teacherId
+        string classId
+    }
+
+    USER ||--o| STUDENT : has
+    USER ||--o| TEACHER : has
+
+    STUDENT ||--o{ ENROLLMENT : enrolls
+    CLASS ||--o{ ENROLLMENT : contains
+
+    TEACHER ||--o{ CLASSTEACHER : teaches
+    CLASS ||--o{ CLASSTEACHER : has
+
+    CLASS ||--o{ EVALUATION : has
+    ENROLLMENT ||--o{ EVALUATIONGRADE : receives
+    EVALUATION ||--o{ EVALUATIONGRADE : generates
 ```
 
 ---
