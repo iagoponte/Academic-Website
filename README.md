@@ -92,7 +92,7 @@ src/
 - **Express**
 - **TypeScript**
 - **Prisma ORM**
-- **PostgreSQL**
+- **PostgreSQL versão 17.4**
 - **Swagger (OpenAPI 3.0)**
 - **ESLint / Prettier**
 
