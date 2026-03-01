@@ -19,7 +19,7 @@ import { z } from "zod";
  *           type: string
  *           format: password
  *           description: Senha do usuário
- *           example: "senha123"
+ *           example: "senhaSegura123"
  *     AuthResponse:
  *       type: object
  *       properties:
@@ -41,8 +41,8 @@ import { z } from "zod";
  *               type: array
  *               items:
  *                 type: string
- *                 enum: [ADMIN, TEACHER, STUDENT]
- *                 example: ["ADMIN", "TEACHER"]
+ *                 enum: [Administrator, Teacher, Student, Coordinator, Director]
+ *                 example: ["Administrator"]
  */
 export const loginSchema = z.object({
   email: z.string().email("Formato de email inválido"),

@@ -13,9 +13,9 @@ const controller = new TeacherController();
  *     requestBody:
  *       required: true
  *       content:
- *       application/json:
- *         schema:
- *           $ref: "#/components/schemas/CreateTeacher"
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateTeacher"
  *     responses:
  *       201:
  *         description: Professor criado com sucesso

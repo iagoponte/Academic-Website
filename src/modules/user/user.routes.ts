@@ -97,6 +97,7 @@ const authController = new AuthController();
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 userRoutes.post('/login', authController.handle)
+// component schema from auth.dto.ts
 
 /**
  * @openapi
