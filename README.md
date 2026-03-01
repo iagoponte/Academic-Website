@@ -100,7 +100,7 @@ src/
 
 ## 📄 Documentação da API (Swagger)
 
-A documentação da API está disponível via Swagger UI: http://localhost:3000/api/docs
+A documentação da API está disponível via Swagger UI: https://academic-website-w4pq.onrender.com/api/docs/
 
 
 Nela é possível:
