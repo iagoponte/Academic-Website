@@ -2,6 +2,7 @@ import type { Express } from "express";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
+// padrão swagger route: http://localhost:3000/api/docs/
 export const swaggerOptions: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
@@ -12,23 +13,22 @@ export const swaggerOptions: swaggerJSDoc.Options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Servidor Local",
+        url: process.env.API_URL ||"http://localhost:3000",
+        description: process.env.NODE_ENV == "production" ? "Servidor de Produção" : "Servidor Local",
       },
     ],
     components: {
-      // securitySchemes: {
-      // bearerAuth: {
-      //   type: 'http',
-      //   scheme: 'bearer',
-      //   bearerFormat: 'JWT',
-      // },
-      // },
+      securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      },
     },
   },
   apis: ["src/**/*.ts"],
 };
-// swagger route: http://localhost:3000/api/docs/
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
