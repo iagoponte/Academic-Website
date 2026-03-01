@@ -15,11 +15,8 @@ const authController = new AuthController();
  *      required:
  *        - email
  *        - password
- *        - role
+ *        - roles
  *      properties:
- *        name:
- *          type: string
- *          example: Admin Principal
  *        email:
  *          type: string
  *          format: email
@@ -30,8 +27,8 @@ const authController = new AuthController();
  *          example: senhaSegura123
  *        role:
  *          type: string
- *          enum: [ADMIN, STUDENT, TEACHER, COORDINATOR, DIRECTOR]
- *          example: ADMIN
+ *          enum: [Student, Teacher, Administrator, Coordinator, Director]
+ *          example: Administrator
  *    UpdateUser:
  *      type: object
  *      properties:
