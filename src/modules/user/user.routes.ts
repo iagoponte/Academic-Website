@@ -25,10 +25,10 @@ const authController = new AuthController();
  *          type: string
  *          minLength: 6
  *          example: senhaSegura123
- *        role:
+ *        roles:
  *          type: string
  *          enum: [Student, Teacher, Administrator, Coordinator, Director]
- *          example: Administrator
+ *          example: ["Administrator"]
  *    UpdateUser:
  *      type: object
  *      properties:
@@ -66,7 +66,7 @@ const authController = new AuthController();
 //Login route
 /**
  * @openapi
- * /users/login:
+ * /api/users/login:
  *   post:
  *     summary: Autentica um usuário e retorna um token JWT
  *     tags: [Auth]
