@@ -23,6 +23,16 @@ teacherRoutes.use(ensureAuthenticated);
  *           schema:
  *             $ref: "#/components/schemas/CreateTeacher"
  *     responses:
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Token de autenticação (JWT) com papel de 'Administrator' ou 'Coordinator'
+ *     responses:
  *       201:
  *         description: Professor criado com sucesso
  *         content:
@@ -53,6 +63,8 @@ teacherRoutes.post('/', ensureRoles([Role.Administrator, Role.Coordinator]), con
  *              type: array
  *              items:
  *              $ref: "#/components/schemas/TeacherResponse"
+ *    security:
+ *      - bearerAuth: []
  */
 teacherRoutes.get('/', controller.list);
 
@@ -68,6 +80,8 @@ teacherRoutes.get('/', controller.list);
  *        required: true
  *        schema:
  *          type: string
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: Professor encontrado
@@ -98,6 +112,8 @@ teacherRoutes.get('/:id', controller.getById);
  *        application/json:
  *          schema:
  *            $ref: "#/components/schemas/UpdateTeacher"
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: Professor atualizado com sucesso
@@ -120,6 +136,8 @@ teacherRoutes.patch('/:id', controller.update);
  *        required: true
  *        schema:
  *          type: string
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      204:
  *        description: Professor removido com sucesso
