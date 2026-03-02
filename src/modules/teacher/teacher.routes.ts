@@ -1,8 +1,14 @@
 import { Router } from 'express';
 import { TeacherController } from './teacher.controller.js';
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const teacherRoutes = Router();
 const controller = new TeacherController();
+
+// All teacher routes below this point will require authentication
+teacherRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -30,7 +36,7 @@ const controller = new TeacherController();
  *             schema:
  *               $ref: "#/components/schemas/ErrorResponse"
  */
-teacherRoutes.post('/', controller.create);
+teacherRoutes.post('/', ensureRoles([Role.Administrator, Role.Coordinator]), controller.create);
 
 /**
  * @openapi
