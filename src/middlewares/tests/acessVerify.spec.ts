@@ -75,7 +75,8 @@ describe('ensureRoles', () => {
   });
 
   it('should throw AppError if req.user is not set', () => {
-    req = makeReq({ user: undefined });
+    req = makeReq();
+    delete req.user; 
     const allowedRoles = [Role.Administrator];
     const middleware = ensureRoles(allowedRoles);
 
