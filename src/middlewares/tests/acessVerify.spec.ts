@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import jwt from 'jsonwebtoken';
-import { makeReq, makeRes, makeNext } from './helpers';
-import { ensureAuthenticated } from '../authenticate.middleware';
-import { ensureRoles } from '../authorize.middleware';
-import { AppError } from '../../shared/errors/appError';
-import { Role } from '../../modules/user/user.entity';
+import { makeReq, makeRes, makeNext } from './helpers.js';
+import { ensureAuthenticated } from '../authenticate.middleware.js';
+import { ensureRoles } from '../authorize.middleware.js';
+import { AppError } from '../../shared/errors/appError.js';
+import { Role } from '../../modules/user/user.entity.js';
 
 // Mock JWT_SECRET for testing
 process.env.JWT_SECRET = 'test_secret';
