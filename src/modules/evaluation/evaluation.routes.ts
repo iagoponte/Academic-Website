@@ -12,6 +12,8 @@ const controller = new EvaluationController();
  *     summary: Criar avaliação
  *     tags:
  *       - Evaluations
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -40,6 +42,8 @@ evaluationRoutes.post('/', controller.create);
  *     summary: Listar avaliações por turma
  *     tags:
  *       - Evaluations
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: classId
@@ -73,6 +77,8 @@ evaluationRoutes.get('/class/:classId', controller.listByClass);
  *     summary: Listar todas as avaliações (admin)
  *     tags:
  *       - Evaluations
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de todas as avaliações
@@ -91,6 +97,8 @@ evaluationRoutes.get('/', controller.listAll);
  *     summary: Buscar avaliação por ID
  *     tags:
  *       - Evaluations
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -120,6 +128,8 @@ evaluationRoutes.get('/:id', controller.getById);
  *     summary: Atualizar avaliação
  *     tags:
  *       - Evaluations
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -155,6 +165,8 @@ evaluationRoutes.put('/:id', controller.update);
  *     summary: Remover avaliação
  *     tags:
  *       - Evaluations
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

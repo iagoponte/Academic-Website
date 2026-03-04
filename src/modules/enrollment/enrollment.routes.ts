@@ -12,6 +12,8 @@ const controller = new EnrollmentController();
  *     summary: Criar matrícula
  *     tags:
  *       - Enrollments
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -40,6 +42,8 @@ enrollmentRoutes.post('/', controller.create);
  *     summary: Listar turmas de um aluno
  *     tags:
  *       - Enrollments
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: studentId
@@ -71,6 +75,8 @@ enrollmentRoutes.get('/students/:studentId/classes', controller.listByStudent);
  *     summary: Listar alunos de uma turma
  *     tags:
  *       - Enrollments
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: classId
@@ -104,6 +110,8 @@ enrollmentRoutes.get('/classes/:classId/students', controller.listByClass);
  *     summary: Listar todas as matrículas (admin)
  *     tags:
  *       - Enrollments
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de todas as matrículas
@@ -122,6 +130,8 @@ enrollmentRoutes.get('/admin', controller.listAll);
  *     summary: Buscar matrícula por ID (admin)
  *     tags:
  *       - Enrollments
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -151,6 +161,8 @@ enrollmentRoutes.get('/admin/:id', controller.getById);
  *     summary: Remover matrícula (admin)
  *     tags:
  *       - Enrollments
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

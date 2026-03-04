@@ -10,7 +10,9 @@ const classTeacherController = new ClassTeacherController();
  *   post:
  *     summary: Vincular professor a uma turma
  *     tags:
- *       - ClassTeacher
+ *       - [ClassTeacher]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -55,7 +57,9 @@ classTeacherRoutes.post('/classes/:id/teachers', classTeacherController.assign);
  *   delete:
  *     summary: Desvincular professor de uma turma
  *     tags:
- *       - ClassTeacher
+ *       - [ClassTeacher]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

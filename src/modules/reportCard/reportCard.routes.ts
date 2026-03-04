@@ -10,6 +10,8 @@ const controller = new ReportCardController();
  *   get:
  *     summary: Gera o boletim do aluno (JSON)
  *     tags: [Report Cards]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -38,6 +40,8 @@ reportCardRoutes.get('/enrollments/:id', controller.generate.bind(controller));
  *   get:
  *     summary: Gera o boletim do aluno em PDF
  *     tags: [Report Cards]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

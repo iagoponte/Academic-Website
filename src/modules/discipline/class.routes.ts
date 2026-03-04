@@ -9,9 +9,11 @@ const controller = new ClassController();
  * /api/classes:
  *   post:
  *     tags:
- *       - Classes
+ *       - [Classes]
  *     summary: Criar uma nova turma
  *     description: Cria uma nova turma informando nome e semestre.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -36,9 +38,11 @@ classRoutes.post('/', controller.create);
  * /api/classes:
  *   get:
  *     tags:
- *       - Classes
+ *       - [Classes]
  *     summary: Listar todas as turmas
  *     description: Retorna a lista de todas as turmas cadastradas.
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de turmas
@@ -57,9 +61,11 @@ classRoutes.get('/', controller.list);
  * /api/classes/{id}:
  *   get:
  *     tags:
- *       - Classes
+ *       - [Classes]
  *     summary: Buscar turma por ID
  *     description: Retorna os dados de uma turma específica, incluindo professores vinculados.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

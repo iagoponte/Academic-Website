@@ -10,6 +10,8 @@ const controller = new StudentController();
  *  post:
  *    summary: Cria um novo estudante
  *    tags: [Students]
+ *    security:
+ *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:
@@ -38,6 +40,8 @@ studentRoutes.post('/', controller.create);
  *  get:
  *    summary: Lista todos os estudantes
  *    tags: [Students]
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: Lista de estudantes
@@ -56,6 +60,8 @@ studentRoutes.get('/', controller.list);
  *  get:
  *    summary: Busca estudante por ID
  *    tags: [Students]
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: id
@@ -80,6 +86,8 @@ studentRoutes.get('/:id', controller.getById);
  *  patch:
  *    summary: Atualiza dados cadastrais do estudante
  *    tags: [Students]
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: id
@@ -108,6 +116,8 @@ studentRoutes.get('/:id', controller.getById);
  *  patch:
  *    summary: Inativa um estudante
  *    tags: [Students]
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: id
@@ -131,6 +141,8 @@ studentRoutes.patch('/:id/inactivate', controller.inactivate);
  *  patch:
  *    summary: Corrige a matrícula do estudante (Requer motivo)
  *    tags: [Students]
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: id

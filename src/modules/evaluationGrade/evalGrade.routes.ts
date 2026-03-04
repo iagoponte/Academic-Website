@@ -13,6 +13,8 @@ const controller = new GradeController();
  *     summary: Lançar nota
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -41,6 +43,8 @@ gradeRoutes.post('/', controller.create);
  *     summary: Atualizar nota
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -76,6 +80,8 @@ gradeRoutes.put('/:id', controller.update);
  *     summary: Listar notas por matrícula (boletim)
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: enrollmentId
@@ -107,6 +113,8 @@ gradeRoutes.get('/enrollment/:enrollmentId', controller.listByEnrollment);
  *     summary: Listar notas por avaliação (diário de notas)
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: evaluationId
@@ -140,6 +148,8 @@ gradeRoutes.get('/evaluation/:evaluationId', controller.listByEvaluation);
  *     summary: Listar todas as notas (admin)
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de todas as notas
@@ -153,20 +163,33 @@ gradeRoutes.get('/evaluation/:evaluationId', controller.listByEvaluation);
 gradeRoutes.get('/', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.listAll);
 /**
  * @openapi
- * /api/grades:
+ * /api/grades/{id}:
  *   get:
- *     summary: Listar todas as notas (admin)
+ *     summary: Buscar nota por ID (admin)
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
  *     responses:
  *       200:
- *         description: Lista de todas as notas
+ *         description: Nota encontrada
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/GradeResponse'
+ *               $ref: '#/components/schemas/GradeResponse'
+ *       404:
+ *         description: Nota não encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 gradeRoutes.get('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.getById);
 /**
@@ -176,6 +199,8 @@ gradeRoutes.get('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administra
  *     summary: Remover nota
  *     tags:
  *       - Grades
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
