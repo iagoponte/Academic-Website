@@ -18,25 +18,27 @@ export function ensureAuthenticated(
   next: NextFunction
 ) {
   const authHeader = req.headers.authorization;
-
   if (!authHeader) {
     throw new AppError("Token missing", 401);
   }
-
+  console.log("=== RAIO-X DO MIDDLEWARE ===");
+  console.log("111. authHeader sem split:", authHeader);
+  
   const [, token] = authHeader.split(" ");
-
   if (!token) {
     throw new AppError("Token missing", 401);
   }
-
+  console.log("=== RAIO-X DO MIDDLEWARE ===");
+  console.log("1. Header Completo:", authHeader);
+  console.log("2. Token Extraído:", token);
+  console.log("3. Segredo Lido:", process.env.JWT_SECRET);
+  console.log("============================");
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as unknown as TokenPayload;
-
     req.user = {
       id: decoded.sub,
       roles: decoded.roles 
     };
-
     return next();
   } catch (err) {
     throw new AppError("Invalid token", 401);

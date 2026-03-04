@@ -48,11 +48,13 @@ describe('ensureAuthenticated', () => {
   it('should set req.user and call next() if token is valid', () => {
     const userId = 'user-id-123';
     const userRoles = [Role.Administrator];
-    const token = jwt.sign({ sub: userId, roles: userRoles }, process.env.JWT_SECRET!, {
-      expiresIn: '1h',
+    const token = jwt.sign({ roles: userRoles }, "default_secret" as string, {
+      subject: userId, 
+      expiresIn: '1d',
     });
+    
     req.headers = { authorization: `Bearer ${token}` };
-
+   
     ensureAuthenticated(req, res, next);
 
     expect(req.user).toEqual({ id: userId, roles: userRoles });
