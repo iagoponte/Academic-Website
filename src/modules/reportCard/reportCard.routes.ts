@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { ReportCardController } from './reportCard.controller.js';
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const reportCardRoutes = Router();
 const controller = new ReportCardController();
+
+reportCardRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -33,7 +38,7 @@ const controller = new ReportCardController();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-reportCardRoutes.get('/enrollments/:id', controller.generate.bind(controller));
+reportCardRoutes.get('/enrollments/:id', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.generate.bind(controller));
 /**
  * @openapi
  * /report-cards/enrollments/{id}/pdf:
@@ -60,6 +65,6 @@ reportCardRoutes.get('/enrollments/:id', controller.generate.bind(controller));
  *       404:
  *         description: Matrícula não encontrada
  */
-reportCardRoutes.get('/enrollments/:id/pdf', controller.generatePdf.bind(controller));
+reportCardRoutes.get('/enrollments/:id/pdf', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.generatePdf.bind(controller));
 
 export { reportCardRoutes };

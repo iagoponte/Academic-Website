@@ -1,8 +1,13 @@
 import { Router } from "express";
 import { ClassController } from "./class.controller.js";
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const classRoutes = Router();
 const controller = new ClassController();
+
+classRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -32,7 +37,7 @@ const controller = new ClassController();
  *       500:
  *         description: Erro interno do servidor
  */
-classRoutes.post('/', controller.create);
+classRoutes.post('/', ensureRoles([Role.Administrator, Role.Coordinator]), controller.create);
 /**
  * @openapi
  * /api/classes:
@@ -55,7 +60,7 @@ classRoutes.post('/', controller.create);
  *       500:
  *         description: Erro interno do servidor
  */
-classRoutes.get('/', controller.list);
+classRoutes.get('/', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.list);
 /**
  * @openapi
  * /api/classes/{id}:
@@ -85,6 +90,6 @@ classRoutes.get('/', controller.list);
  *       500:
  *         description: Erro interno do servidor
  */
-classRoutes.get('/:id', controller.getById);
+classRoutes.get('/:id', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.getById);
 
 export { classRoutes };

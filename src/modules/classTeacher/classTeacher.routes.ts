@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { ClassTeacherController } from './classTeacher.controller.js';
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const classTeacherRoutes = Router();
 const classTeacherController = new ClassTeacherController();
+
+classTeacherRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -50,7 +55,7 @@ const classTeacherController = new ClassTeacherController();
  *       404:
  *         description: Turma ou professor não encontrado
  */
-classTeacherRoutes.post('/classes/:id/teachers', classTeacherController.assign);
+classTeacherRoutes.post('/classes/:id/teachers', ensureRoles([Role.Administrator, Role.Coordinator]), classTeacherController.assign);
 /**
  * @openapi
  * /classes/{id}/teachers/{teacherId}:
@@ -85,6 +90,6 @@ classTeacherRoutes.post('/classes/:id/teachers', classTeacherController.assign);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-classTeacherRoutes.delete('/classes/:id/teachers/:teacherId', classTeacherController.unassign);
+classTeacherRoutes.delete('/classes/:id/teachers/:teacherId', ensureRoles([Role.Administrator, Role.Coordinator]), classTeacherController.unassign);
 
 export { classTeacherRoutes };

@@ -2,9 +2,12 @@ import { Router } from 'express';
 import { GradeController } from './evalGrade.controller.js';
 import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
 import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const gradeRoutes = Router();
 const controller = new GradeController();
+
+gradeRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -35,7 +38,7 @@ const controller = new GradeController();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.post('/', controller.create);
+gradeRoutes.post('/', ensureRoles([Role.Administrator, Role.Teacher]), controller.create);
 /**
  * @openapi
  * /api/grades/{id}:
@@ -72,7 +75,7 @@ gradeRoutes.post('/', controller.create);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.put('/:id', controller.update);
+gradeRoutes.put('/:id', ensureRoles([Role.Administrator, Role.Teacher]), controller.update);
 /**
  * @openapi
  * /api/grades/enrollment/{enrollmentId}:
@@ -105,7 +108,7 @@ gradeRoutes.put('/:id', controller.update);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.get('/enrollment/:enrollmentId', controller.listByEnrollment);
+gradeRoutes.get('/enrollment/:enrollmentId', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.listByEnrollment);
 /**
  * @openapi
  * /api/grades/evaluation/{evaluationId}:
@@ -138,7 +141,7 @@ gradeRoutes.get('/enrollment/:enrollmentId', controller.listByEnrollment);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.get('/evaluation/:evaluationId', controller.listByEvaluation);
+gradeRoutes.get('/evaluation/:evaluationId', ensureRoles([Role.Administrator, Role.Teacher]), controller.listByEvaluation);
 
 //ADMIN
 /**
@@ -160,7 +163,7 @@ gradeRoutes.get('/evaluation/:evaluationId', controller.listByEvaluation);
  *               items:
  *                 $ref: '#/components/schemas/GradeResponse'
  */
-gradeRoutes.get('/', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.listAll);
+gradeRoutes.get('/', ensureRoles([Role.Teacher, Role.Administrator]), controller.listAll);
 /**
  * @openapi
  * /api/grades/{id}:
@@ -191,7 +194,7 @@ gradeRoutes.get('/', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.get('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.getById);
+gradeRoutes.get('/:id', ensureRoles([Role.Teacher, Role.Administrator]), controller.getById);
 /**
  * @openapi
  * /api/grades/{id}:
@@ -218,6 +221,6 @@ gradeRoutes.get('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administra
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-gradeRoutes.delete('/:id', ensureAuthenticated, ensureRoles(['Teacher', 'Administrator']), controller.delete);
+gradeRoutes.delete('/:id', ensureRoles([Role.Teacher, Role.Administrator]), controller.delete);
 
 export { gradeRoutes };

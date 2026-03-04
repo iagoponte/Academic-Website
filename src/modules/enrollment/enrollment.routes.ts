@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { EnrollmentController } from './enrollment.controller.js';
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const enrollmentRoutes = Router();
 const controller = new EnrollmentController();
+
+enrollmentRoutes.use(ensureAuthenticated);
 
 //DOMAIN ROUTES
 /**
@@ -34,7 +39,7 @@ const controller = new EnrollmentController();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-enrollmentRoutes.post('/', controller.create);
+enrollmentRoutes.post('/', ensureRoles([Role.Administrator, Role.Coordinator]), controller.create);
 /**
  * @openapi
  * /api/enrollments/students/{studentId}/classes:
@@ -67,7 +72,7 @@ enrollmentRoutes.post('/', controller.create);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-enrollmentRoutes.get('/students/:studentId/classes', controller.listByStudent);
+enrollmentRoutes.get('/students/:studentId/classes', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.listByStudent);
 /**
  * @openapi
  * /api/enrollments/classes/{classId}/students:
@@ -100,7 +105,7 @@ enrollmentRoutes.get('/students/:studentId/classes', controller.listByStudent);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-enrollmentRoutes.get('/classes/:classId/students', controller.listByClass);
+enrollmentRoutes.get('/classes/:classId/students', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.listByClass);
 
 //ADMIN ROUTES
 /**
@@ -122,7 +127,7 @@ enrollmentRoutes.get('/classes/:classId/students', controller.listByClass);
  *               items:
  *                 $ref: '#/components/schemas/EnrollmentResponse'
  */
-enrollmentRoutes.get('/admin', controller.listAll);
+enrollmentRoutes.get('/admin', ensureRoles([Role.Administrator, Role.Coordinator]), controller.listAll);
 /**
  * @openapi
  * /api/enrollments/admin/{id}:
@@ -153,7 +158,7 @@ enrollmentRoutes.get('/admin', controller.listAll);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-enrollmentRoutes.get('/admin/:id', controller.getById);
+enrollmentRoutes.get('/admin/:id', ensureRoles([Role.Administrator, Role.Coordinator]), controller.getById);
 /**
  * @openapi
  * /api/enrollments/admin/{id}:
@@ -180,6 +185,6 @@ enrollmentRoutes.get('/admin/:id', controller.getById);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-enrollmentRoutes.delete('/admin/:id', controller.delete);
+enrollmentRoutes.delete('/admin/:id', ensureRoles([Role.Administrator, Role.Coordinator]), controller.delete);
 
 export { enrollmentRoutes };

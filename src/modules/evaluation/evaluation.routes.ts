@@ -1,9 +1,14 @@
 import { Router } from "express";
 import { EvaluationController } from "./evaluation.controller.js";
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 
 const evaluationRoutes = Router();
 const controller = new EvaluationController();
+
+evaluationRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -34,7 +39,7 @@ const controller = new EvaluationController();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-evaluationRoutes.post('/', controller.create);
+evaluationRoutes.post('/', ensureRoles([Role.Administrator, Role.Teacher]), controller.create);
 /**
  * @openapi
  * /api/evaluations/class/{classId}:
@@ -67,7 +72,7 @@ evaluationRoutes.post('/', controller.create);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-evaluationRoutes.get('/class/:classId', controller.listByClass);
+evaluationRoutes.get('/class/:classId', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.listByClass);
 
 //ADMIN
 /**
@@ -89,7 +94,7 @@ evaluationRoutes.get('/class/:classId', controller.listByClass);
  *               items:
  *                 $ref: '#/components/schemas/EvaluationResponse'
  */
-evaluationRoutes.get('/', controller.listAll);
+evaluationRoutes.get('/', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.listAll);
 /**
  * @openapi
  * /api/evaluations/{id}:
@@ -120,7 +125,7 @@ evaluationRoutes.get('/', controller.listAll);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-evaluationRoutes.get('/:id', controller.getById);
+evaluationRoutes.get('/:id', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.getById);
 /**
  * @openapi
  * /api/evaluations/{id}:
@@ -157,7 +162,7 @@ evaluationRoutes.get('/:id', controller.getById);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-evaluationRoutes.put('/:id', controller.update);
+evaluationRoutes.put('/:id', ensureRoles([Role.Administrator, Role.Teacher]), controller.update);
 /**
  * @openapi
  * /api/evaluations/{id}:
@@ -184,6 +189,6 @@ evaluationRoutes.put('/:id', controller.update);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-evaluationRoutes.delete('/:id', controller.delete);
+evaluationRoutes.delete('/:id', ensureRoles([Role.Administrator, Role.Teacher]), controller.delete);
 
 export { evaluationRoutes };

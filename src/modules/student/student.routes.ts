@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { StudentController } from './student.controller.js';
+import { ensureAuthenticated } from '../../middlewares/authenticate.middleware.js';
+import { ensureRoles } from '../../middlewares/authorize.middleware.js';
+import { Role } from '../user/user.entity.js';
 
 const studentRoutes = Router();
 const controller = new StudentController();
+
+studentRoutes.use(ensureAuthenticated);
 
 /**
  * @openapi
@@ -32,7 +37,7 @@ const controller = new StudentController();
  *            schema:
  *              $ref: "#/components/schemas/ErrorResponse"
  */
-studentRoutes.post('/', controller.create);
+studentRoutes.post('/', ensureRoles([Role.Administrator, Role.Coordinator]), controller.create);
 
 /**
  * @openapi
@@ -52,7 +57,7 @@ studentRoutes.post('/', controller.create);
  *              items:
  *                $ref: "#/components/schemas/StudentResponse"
  */
-studentRoutes.get('/', controller.list);
+studentRoutes.get('/', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.list);
 
 /**
  * @openapi
@@ -78,7 +83,7 @@ studentRoutes.get('/', controller.list);
  *      404:
  *        description: Estudante não encontrado
  */
-studentRoutes.get('/:id', controller.getById);
+studentRoutes.get('/:id', ensureRoles([Role.Administrator, Role.Coordinator, Role.Teacher]), controller.getById);
 
 /**
  * @openapi
@@ -108,7 +113,7 @@ studentRoutes.get('/:id', controller.getById);
  *            schema:
  *              $ref: "#/components/schemas/StudentResponse"
  */
- studentRoutes.patch('/:id', controller.update); 
+ studentRoutes.patch('/:id', ensureRoles([Role.Administrator, Role.Coordinator]), controller.update); 
  
  /**
  * @openapi
@@ -133,7 +138,7 @@ studentRoutes.get('/:id', controller.getById);
  *              $ref: "#/components/schemas/StudentResponse"
  *
  */
-studentRoutes.patch('/:id/inactivate', controller.inactivate);
+studentRoutes.patch('/:id/inactivate', ensureRoles([Role.Administrator, Role.Coordinator]), controller.inactivate);
 
 /**
  * @openapi
@@ -163,6 +168,6 @@ studentRoutes.patch('/:id/inactivate', controller.inactivate);
  *            schema:
  *              $ref: "#/components/schemas/StudentResponse"
  */
-studentRoutes.patch('/:id/correct-registration', controller.correctRegistration);
+studentRoutes.patch('/:id/correct-registration', ensureRoles([Role.Administrator, Role.Coordinator]), controller.correctRegistration);
 
 export { studentRoutes };
