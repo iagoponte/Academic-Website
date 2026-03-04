@@ -22,16 +22,8 @@ teacherRoutes.use(ensureAuthenticated);
  *         application/json:
  *           schema:
  *             $ref: "#/components/schemas/CreateTeacher"
- *     responses:
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         schema:
- *           type: string
- *         description: Token de autenticação (JWT) com papel de 'Administrator' ou 'Coordinator'
  *     responses:
  *       201:
  *         description: Professor criado com sucesso
