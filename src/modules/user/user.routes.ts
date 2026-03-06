@@ -63,6 +63,7 @@ const authController = new AuthController();
  *
  */
 
+//Should transfer to auth.routes.ts, but left here for now to avoid merge conflicts with auth module development
 //Login route
 /**
  * @openapi

@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import cors from 'cors'; // Import the cors package
 import { globalErrorHandler } from './middlewares/errorMiddleware.js';
 import { studentRoutes } from './modules/student/student.routes.js';
 import { teacherRoutes } from './modules/teacher/teacher.routes.js';
@@ -12,6 +13,14 @@ import { setupSwagger } from './config/swagger.js';
 import { userRoutes } from './modules/user/user.routes.js';
 
 const app = express();
+
+// Configure CORS
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow requests from your frontend's development server
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(express.json());
 
 app.use((req, res, next) => {

@@ -8,13 +8,10 @@ import { UserRepository } from "../user/user.repository.js";
 export class AuthService {
   async execute({ email, password }: LoginDTO) {
     const userService = new UserService(new UserRepository());
-
     const user = await userService.getByEmail(email);
     if (!user) throw new AppError("Email ou senha incorretos", 401);
-
     const passwordMatch = await compare(password, user.password);
     if (!passwordMatch) throw new AppError("Email ou senha incorretos", 401);
-
     const token = jwt.sign(
       {
         roles: user.roles, //all roles goes into token
