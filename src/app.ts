@@ -16,7 +16,8 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend's development server
+  origin: ['http://localhost:5173', 'https://arcademy-frontend.vercel.app'], // Allow requests from your frontend's development server
+  
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
